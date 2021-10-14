@@ -1,7 +1,6 @@
 package com.infinitus.bms_oa.task;
 
 import com.alibaba.fastjson.JSONObject;
-import com.infinitus.bms_oa.controller.InfinitusController;
 import com.infinitus.bms_oa.enums.OaFlagEnum;
 import com.infinitus.bms_oa.pojo.*;
 import com.infinitus.bms_oa.service.BmsBillAdujestService;
@@ -14,11 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
