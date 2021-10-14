@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.infinitus.bms_oa.mapper.BmsBillAdujestMapper">
+    <!--定义一个名为BaseResultMap的返回类型-->
+    <resultMap id="BaseResultMap" type="com.infinitus.bms_oa.pojo.BmsBillAdjust">
+        <id column="id" property="id" jdbcType="INTEGER"></id>
+        <result column="adj_no" property="adj_no" jdbcType="VARCHAR"></result>
+        <result column="adj_type" property="adj_type" jdbcType="VARCHAR"></result>
+        <result column="adj_dt" property="adj_dt" jdbcType="TIMESTAMP"></result>
+        <result column="owner_key" property="owner_key" jdbcType="VARCHAR"></result>
+        <result column="settle_wh_code" property="settle_wh_code" jdbcType="VARCHAR"></result>
+        <result column="vendor_no" property="vendor_no" jdbcType="VARCHAR"></result>
+        <result column="finance_account_no" property="finance_account_no" jdbcType="VARCHAR"></result>
+        <result column="fee_item_code" property="fee_item_code" jdbcType="VARCHAR"></result>
+        <result column="adj_reason" property="adj_reason" jdbcType="VARCHAR"></result>
+        <result column="adj_amount" property="adj_amount" jdbcType="DECIMAL"></result>
+        <result column="settle_year_month" property="settle_year_month" jdbcType="TIMESTAMP"></result>
+        <result column="do_no" property="do_no" jdbcType="VARCHAR"></result>
+        <result column="biz_type" property="biz_type" jdbcType="VARCHAR"></result>
+        <result column="ship_method" property="ship_method" jdbcType="VARCHAR"></result>
+        <result column="org_fee" property="org_fee" jdbcType="DECIMAL"></result>
+        <result column="comments" property="comments" jdbcType="VARCHAR"></result>
+        <result column="attachment" property="attachment" jdbcType="VARCHAR"></result>
+        <result column="settle_status" property="settle_status" jdbcType="VARCHAR"></result>
+        <result column="settle_no" property="settle_no" jdbcType="VARCHAR"></result>
+        <result column="status" property="status" jdbcType="VARCHAR"></result>
+    </resultMap>
+
+    <resultMap id="BaseResultMap_Infinitus" type="com.infinitus.bms_oa.pojo.Infinitus">
+        <result column="workflowId" property="adj_no" jdbcType="VARCHAR"></result>
+        <result column="requestName" property="adj_reason" jdbcType="VARCHAR"></result>
+        <result column="workcode" property="create_id" jdbcType="VARCHAR"></result>
+    </resultMap>
+
+    <resultMap id="BaseResultMap_InfinitusBill" type="com.infinitus.bms_oa.pojo.BmsBillAdjust">
+        <result column="id" property="id" jdbcType="VARCHAR"></result>
+        <result column="create_id" property="create_id" jdbcType="VARCHAR"></result>
+        <result column="adj_no" property="adj_no" jdbcType="VARCHAR"></result>
+        <result column="adj_type" property="adj_type" jdbcType="VARCHAR"></result>
+        <result column="comments" property="comments" jdbcType="VARCHAR"></result>
+        <result column="adj_dt" property="adj_dt" jdbcType="TIMESTAMP"></result>
+        <result column="settle_year_month" property="settle_year_month" jdbcType="TIMESTAMP"></result>
+        <result column="adj_amount" property="adj_amount" jdbcType="INTEGER"></result>
+        <result column="settle_wh_code" property="settle_wh_code" jdbcType="VARCHAR"></result>
+        <result column="vendor_no" property="vendor_no" jdbcType="VARCHAR"></result>
+        <result column="owner_key" property="owner_key" jdbcType="VARCHAR"></result>
+        <result column="owner_name" property="owner_name" jdbcType="VARCHAR"></result>
+        <result column="finance_account_no" property="finance_account_no" jdbcType="VARCHAR"></result>
+        <result column="adj_reason" property="adj_reason" jdbcType="VARCHAR"></result>
+        <result column="attachment" property="attachment" jdbcType="VARCHAR"></result>
+        <result column="org_fee" property="org_fee" jdbcType="INTEGER"></result>
+    </resultMap>
+
+    <resultMap id="BaseResultMap_InfinitusBillException" type="com.infinitus.bms_oa.pojo.BmsBillAdjust">
+        <result column="id" property="id" jdbcType="VARCHAR"></result>
+        <result column="create_id" property="create_id" jdbcType="VARCHAR"></result>
+        <result column="exception_adj_no" property="adj_no" jdbcType="VARCHAR"></result>
+        <result column="adj_type" property="adj_type" jdbcType="VARCHAR"></result>
+        <result column="comments" property="comments" jdbcType="VARCHAR"></result>
+        <result column="adj_dt" property="adj_dt" jdbcType="TIMESTAMP"></result>
+        <result column="adj_year_month" property="settle_year_month" jdbcType="TIMESTAMP"></result>
+        <result column="adj_amount" property="adj_amount" jdbcType="INTEGER"></result>
+        <result column="billto_wh_code" property="settle_wh_code" jdbcType="VARCHAR"></result>
+        <result column="vendor_no" property="vendor_no" jdbcType="VARCHAR"></result>
+        <result column="owner_key" property="owner_key" jdbcType="VARCHAR"></result>
+        <result column="account_no" property="finance_account_no" jdbcType="VARCHAR"></result>
+        <result column="adj_reason" property="adj_reason" jdbcType="VARCHAR"></result>
+        <result column="attachment" property="attachment" jdbcType="VARCHAR"></result>
+        <result column="is_kpi" property="is_kpi" jdbcType="VARCHAR"></result>
+    </resultMap>
+
+    <resultMap id="BasePlatCode" type="com.infinitus.bms_oa.pojo.PlatCode">
+        <result column="name" property="name" jdbcType="VARCHAR"></result>
+        <result column="descr" property="descr" jdbcType="VARCHAR"></result>
+    </resultMap>
+
+    <!--查找语句-->
+    <!--resultMap表示函数返回的类型-->
+    <select id="selectAdujestById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+       select
+            id,adj_no ,adj_type,adj_dt,owner_key,settle_wh_code,vendor_no,finance_account_no,fee_item_code,adj_reason,
+            adj_amount,settle_year_month,do_no,biz_type,ship_method,org_fee,comments,attachment,settle_status,settle_no,status
+       from bms_bill_adjust
+       where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="getInfinitusBill"  parameterType="java.lang.Integer" resultMap="BaseResultMap_Infinitus">
+        select
+            adj_no,adj_reason,create_id,comments
+       from bms_bill_adjust
+       where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!--通过用户id找用户账号-->
+    <select id="selectLoginNameById" parameterType="java.lang.String"  resultType="String">
+        select login_name from plat_login_user where id=#{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectIdByBillFlag" resultType="Map">
+        select create_id from bms_bill_adjust
+        where oa_flag='0'
+    </select>
+
+    <select id="selectBillByBillFlag" resultMap="BaseResultMap_InfinitusBill">
+        select id,create_id,adj_no,adj_type,comments,adj_dt,settle_year_month,adj_amount,
+        settle_wh_code,vendor_no,owner_key,finance_account_no,adj_reason,attachment,org_fee
+        from bms_bill_adjust
+        where oa_flag='0' or oa_flag is null or oa_flag = null or oa_flag=''
+    </select>
+
+    <select id="selectExceptionByBillFlag" resultMap="BaseResultMap_InfinitusBillException">
+        select id,create_id,exception_adj_no,adj_type,comments,adj_dt,adj_year_month,adj_amount,
+        billto_wh_code,vendor_no,owner_key,account_no,adj_reason,attachment
+        from bms_exception_adj
+        where oa_flag='0' or oa_flag is null or oa_flag = null or oa_flag=''
+    </select>
+
+    <update id="updateOA_flag" >
+        update bms_bill_adjust set oa_flag=#{oa_flag,jdbcType=VARCHAR}
+         where id=#{id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateOA_flag_ex" >
+        update bms_exception_adj set oa_flag=#{oa_flag,jdbcType=VARCHAR}
+         where id=#{id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateBillStatusDate" >
+        update bms_bill_adjust
+        set status='20',approval_dt=#{approval_dt,jdbcType=TIMESTAMP}
+         where  adj_no=#{adj_no,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateExceptionStatusDate" >
+        update bms_exception_adj
+        set status='20',approval_dt=#{approval_dt,jdbcType=TIMESTAMP}
+         where  exception_adj_no=#{adj_no,jdbcType=VARCHAR}
+    </update>
+
+    <select id="getOwnerNameByKey" resultType="java.lang.String">
+        select owner_name  from bms_owner
+        where  owner_key =#{owner_key,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getPlatCodeName" resultType="java.lang.String">
+        select name from plat_code
+        <where>
+            type_id='2c94c6cf45d05e0e0145d42ff62960f8'
+            and code=#{code,jdbcType=VARCHAR}
+        </where>
+
+    </select>
+
+    <select id="getPlatCode" resultMap="BasePlatCode">
+        select name,descr from plat_code
+        <where>
+            type_id='2c94c6cf45d05e0e0145d42ff62960f8'
+            and code=#{code,jdbcType=VARCHAR}
+        </where>
+
+    </select>
+
+    <select id="getJscName" resultType="java.lang.String">
+        select  wh_name from bms_warehouse  where  wh_code =#{wh_code,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="getGysName" resultType="java.lang.String">
+        select vendor_name from bms_vendor where inactive_date>NOW() and delete_id is null
+        and  vendor_code=#{vendor_code,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getCwkmName" resultType="java.lang.String">
+        select account_name from bms_finance_account where inactive_date>NOW() and delete_id is null
+        and account_code=#{account_code,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getBillListDetail" resultMap="BaseResultMap_InfinitusBill">
+        select b.id,u.login_name as create_id,b.adj_no,b.adj_type,b.comments,b.adj_dt,b.settle_year_month,b.adj_amount,
+        w.wh_name as settle_wh_code,v.vendor_name as vendor_no,b.owner_key,
+        f.account_name as finance_account_no,p.name as adj_reason,b.attachment
+        from bms_bill_adjust b
+        left join  bms_warehouse w on b.settle_wh_code=w.wh_code
+        left join bms_vendor v on b.vendor_no=v.vendor_code
+        left join bms_finance_account f on b.finance_account_no=f.account_code
+        left join plat_code p on b.adj_reason=p.code
+        left join plat_login_user u on b.create_id=u.id
+        where
+        v.inactive_date>NOW() and v.delete_id is null
+        and f.inactive_date>NOW() and f.delete_id is null
+        and p.type_id='2c94c6cf45d05e0e0145d42ff62960f8'
+        <if test="adj_noArray!=null and adj_noArray!=''">
+            and b.adj_no in
+            <foreach collection="adj_noArray" item="adj_noArray"
+                     index="index" open="(" close=")" separator=",">
+                #{adj_noArray}
+            </foreach>
+        </if>
+        UNION ALL
+        select e.id,u.login_name as create_id,e.exception_adj_no as adj_no,e.adj_type,e.comments,e.adj_dt,e.adj_year_month as settle_year_month,e.adj_amount,
+        w.wh_name as settle_wh_code,v.vendor_name as vendor_no,e.owner_key,
+        f.account_name as finance_account_no,p.name as adj_reason,e.attachment
+        from bms_exception_adj e
+        left join  bms_warehouse w on e.billto_wh_code=w.wh_code
+        left join bms_vendor v on e.vendor_no=v.vendor_code
+        left join bms_finance_account f on e.account_no=f.account_code
+        left join plat_code p on e.adj_reason=p.code
+        left join plat_login_user u on e.create_id=u.id
+        where
+        v.inactive_date>NOW() and v.delete_id is null
+        and f.inactive_date>NOW() and f.delete_id is null
+        and p.type_id='2c94c6cf45d05e0e0145d42ff62960f8'
+        <if test="adj_noArray!=null and adj_noArray!=''">
+            and e.exception_adj_no in
+            <foreach collection="adj_noArray" item="adj_noArray"
+                     index="index" open="(" close=")" separator=",">
+                #{adj_noArray}
+            </foreach>
+        </if>
+    </select>
+
+    <update id="updateOaFlag_all" >
+        update bms_bill_adjust set oa_flag=#{oa_flag}
+         where adj_no in
+        <foreach collection="noList" item="noList"
+                 index="index" open="(" close=")" separator=",">
+            #{noList}
+        </foreach>
+    </update>
+
+    <update id="updateOaFlagEx_all" >
+        update bms_exception_adj set oa_flag=#{oa_flag}
+        where exception_adj_no in
+        <foreach collection="noList" item="noList"
+                 index="index" open="(" close=")" separator=",">
+            #{noList}
+        </foreach>
+    </update>
+
+
+
+</mapper>
