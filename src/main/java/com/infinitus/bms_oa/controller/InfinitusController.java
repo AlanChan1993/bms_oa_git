@@ -6,6 +6,7 @@ import com.infinitus.bms_oa.pojo.DTO.BillStatusDTO;
 import com.infinitus.bms_oa.pojo.VO.ResultVO;
 import com.infinitus.bms_oa.service.BmsBillAdujestService;
 import com.infinitus.bms_oa.service.Bms_OA_logService;
+import com.infinitus.bms_oa.utils.DateUtil;
 import com.infinitus.bms_oa.utils.Httputil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -219,4 +220,32 @@ public class InfinitusController {
         resultVO.setSuccess(String.valueOf(a));
         return resultVO;
     }
+
+    /**
+     * 1.拿到登录人Id，通过id去查找此id创建的，未同步的两张表的流程单
+     * 2.查询出的adj_no逗号隔开
+     * 3.插入bms_oa_log(生成主单号)
+     * 4.update流程表中的log_code字段
+     * */
+    @RequestMapping("getBillByCreator")
+    public String getBillByCreator(String create_id){
+        try {
+            //1、取adj_no
+            List<String> adjList = logService.getBmsOaLogByCreateId(create_id);
+            //2.处理adj_no
+            StringBuffer nos = new StringBuffer();
+            adjList.stream().forEach(e -> {
+                nos.append(e).append(",");
+            });
+            //3.生成主单号,创建bms_oa_log
+            String code = "BMS-" + new DateUtil().getNowDate();
+            logService.createBmsOaLog(code, nos.toString(), create_id);
+            //4.update 主单号到流程表的 log_code字段
+            logService.updateBillLogCode(code, adjList);
+        } catch (Exception e) {
+            log.info("【getBillByCreator】，e:{}", e);
+        }
+        return "ok";
+    }
+
 }

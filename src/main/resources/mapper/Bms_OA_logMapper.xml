@@ -35,4 +35,43 @@
         update bms_oa_log set status='2',approval_dt=#{approval_dt}
          where code=#{code,jdbcType=VARCHAR}
     </update>
+
+    <select id="getBmsOaLogByCreateId" resultType="java.lang.String">
+        select adj_no from bms_bill_adjust
+        where (oa_flag='0' or oa_flag is null or oa_flag = null or oa_flag='')
+        <if test="create_id != null and create_id !=''">
+            and create_id=#{create_id}
+        </if>
+         UNION ALL
+        select exception_adj_no as adj_no from bms_exception_adj
+        where (oa_flag='0' or oa_flag is null or oa_flag = null or oa_flag='')
+        <if test="create_id != null and create_id !=''">
+            and create_id=#{create_id}
+        </if>
+    </select>
+
+    <insert id="createBmsOaLog" parameterType="com.infinitus.bms_oa.pojo.Bms_OA_log">
+        insert into bms_oa_log (code,oa_flag,bill_code,summit_dt,creator,status)
+        values(#{code},0,#{bill_code},now(),#{creator},0)
+    </insert>
+
+    <update id="updateBillLogCode" >
+        update bms_bill_adjust set log_code=#{code}
+        where adj_no in
+        <foreach collection="stringList" item="stringList"
+                 index="index" open="(" close=")" separator=",">
+            #{stringList}
+        </foreach>
+    </update>
+
+    <update id="updateBillLogCodeEx" >
+        update bms_exception_adj set log_code=#{code}
+        where exception_adj_no in
+        <foreach collection="stringList" item="stringList"
+                 index="index" open="(" close=")" separator=",">
+            #{stringList}
+        </foreach>
+    </update>
+
+
 </mapper>

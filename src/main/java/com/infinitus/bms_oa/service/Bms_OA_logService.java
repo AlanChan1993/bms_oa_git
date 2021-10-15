@@ -15,4 +15,10 @@ public interface Bms_OA_logService {
     List<Bms_OA_log> selectBmsOaLogAll();
 
     boolean modifyLogStatus(String code, Date approval_dt);
+
+    List<String> getBmsOaLogByCreateId(String create_id);
+
+    boolean createBmsOaLog(String code,String bill_code,String creator);
+
+    boolean updateBillLogCode(String code,List<String> stringList);
 }
