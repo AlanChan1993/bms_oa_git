@@ -130,5 +130,14 @@ public class ScheduledTasks {
         return "ok";
     }
 
+    /**
+     * 定时巡查bms_oa_log表，status=2，则为已经同步并审批的记录
+     * 将此条记录中的两张流程表中的记录的审批状态status=20，审批时间修改
+     */
+    public void scheduledBmsOaLog() {//todo
+
+    }
+
+
 
 }

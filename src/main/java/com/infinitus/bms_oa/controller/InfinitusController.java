@@ -5,13 +5,12 @@ import com.infinitus.bms_oa.pojo.*;
 import com.infinitus.bms_oa.pojo.DTO.BillStatusDTO;
 import com.infinitus.bms_oa.pojo.VO.ResultVO;
 import com.infinitus.bms_oa.service.BmsBillAdujestService;
+import com.infinitus.bms_oa.service.Bms_OA_logService;
 import com.infinitus.bms_oa.utils.Httputil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,11 +25,14 @@ public class InfinitusController {
     @Autowired
     private BmsBillAdujestService service;
 
+    @Autowired
+    private Bms_OA_logService logService;
+
     @Value("${BMS.URL.billToOA}")
     private String url;
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-    
+
     @RequestMapping("/Bill")
     public BmsBillAdjust bmsBill(Integer id) {
         return service.selectAdujestById(id);
@@ -56,7 +58,7 @@ public class InfinitusController {
      * 2.提取数据
      * 3.打包数据提交接口
      * 4.接收返回实例
-     * */
+     */
     @PostMapping("/hello")
     public String BmsToOA() {
         //1.设置url，后面改成配置在yml中
@@ -93,9 +95,9 @@ public class InfinitusController {
                     infinitusDetailTablesRow.setSqr(login_name);
                     //todo 判断 费用调整还是运输
                     if (list.get(i).getAdj_no().indexOf("IA-") >= 0) {
-                        if(null!=list.get(i).getOrg_fee()){
-                            table.setZje(list.get(i).getOrg_fee()+list.get(i).getAdj_amount());
-                        }else{
+                        if (null != list.get(i).getOrg_fee()) {
+                            table.setZje(list.get(i).getOrg_fee() + list.get(i).getAdj_amount());
+                        } else {
                             table.setZje(list.get(i).getAdj_amount());
                         }
 
@@ -104,18 +106,18 @@ public class InfinitusController {
                             table.setYsycdzje(list.get(i).getAdj_amount());
                             infinitusDetailTablesRow.setDznr("运费费用调整");
                             //table.setYskkje(list.get(i).getAdj_amount());ko
-                        }else{
+                        } else {
                             table.setCcycdzje(list.get(i).getAdj_amount());
                             infinitusDetailTablesRow.setDznr("仓储费用调整");
                             //table.setCckkdzje(list.get(i).getAdj_amount());
                         }
-                    }else if (list.get(i).getAdj_no().indexOf("TZ-") >= 0){
+                    } else if (list.get(i).getAdj_no().indexOf("TZ-") >= 0) {
                         table.setZje(list.get(i).getAdj_amount());//todo 总金额
                         //判断调整类型(运输或是仓储)
                         if ("01".equals(list.get(i).getAdj_type())) {
                             table.setYsfydzje(list.get(i).getAdj_amount());
                             infinitusDetailTablesRow.setDznr("运费费用调整");
-                        }else{
+                        } else {
                             table.setCcfydzje(list.get(i).getAdj_amount());
                             infinitusDetailTablesRow.setDznr("仓储费用调整");
                         }
@@ -126,16 +128,16 @@ public class InfinitusController {
                     infinitusDetailTablesRow.setCwkm(service.getCwkmName(list.get(i).getFinance_account_no()));
 
                     String key = list.get(i).getOwner_key();
-                    if(key!=null&&!"".equals(key)){
+                    if (key != null && !"".equals(key)) {
                         infinitusDetailTablesRow.setHzdm(key);
                         infinitusDetailTablesRow.setHzmc(service.getOwnerNameByKey(key));//货主名称
                     }
                     //从数据字典中取调整原因描述
                     PlatCode platCode = null;
-                    if(null!=service.getPlatCode(list.get(i).getAdj_reason())){
+                    if (null != service.getPlatCode(list.get(i).getAdj_reason())) {
                         platCode = service.getPlatCode(list.get(i).getAdj_reason());
                     }
-                    if(platCode.getName()!=null&&!"".equals(platCode.getName())){
+                    if (platCode.getName() != null && !"".equals(platCode.getName())) {
                         infinitusDetailTablesRow.setDzyy(platCode.getName());
 
                     }
@@ -154,15 +156,15 @@ public class InfinitusController {
                     //4.接收返回实例
                     String jsonObject = JSONObject.toJSONString(infinitus);
                     log.info("【提交接口Json数据】----:jsonObject:{}", jsonObject);
-                    JSONObject resultJson = Httputil.doPostJson(url,jsonObject,"");
+                    JSONObject resultJson = Httputil.doPostJson(url, jsonObject, "");
                     log.info("【提交接口返回数据resultJson】----:resultJson:{}", resultJson);
                     if (resultJson.get("success") != null && resultJson.get("success").equals(true)) {
-                        service.updateOA_flag("2",list.get(i).getId(),list.get(i).getAdj_no());
+                        service.updateOA_flag("2", list.get(i).getId(), list.get(i).getAdj_no());
                         //提交成功则改变oa_flag的值0 标识未上传  2 已经上传  4上传失败
                         log.info("【修改已传oa_flag的值】···list.get(i).getId():{}", list.get(i).getId());
                         log.info("【修改已传oa_flag的值】···list.get(i).getAdj_no():{}", list.get(i).getAdj_no());
-                    }else {
-                        service.updateOA_flag("4",list.get(i).getId(),list.get(i).getAdj_no());
+                    } else {
+                        service.updateOA_flag("4", list.get(i).getId(), list.get(i).getAdj_no());
                         log.info("【修改传输失败的oa_flag的值】···list.get(i).getId():{}", list.get(i).getId());
                         log.info("【修改传输失败的oa_flag的值】···list.get(i).getAdj_no():{}", list.get(i).getAdj_no());
                     }
@@ -176,23 +178,43 @@ public class InfinitusController {
     }
 
     /**
-     * 修改审核单号的状态跟时间
-     * */
+     * 修改流程审核单号的状态跟时间
+     */
     @RequestMapping("updateBillStatus")
     public ResultVO updateBillStatus(@RequestBody BillStatusDTO statusDTO) throws ParseException {
         ResultVO resultVO = new ResultVO();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
-        Date date =null;
-        if(null!=statusDTO.getApproval_dt()&&!"".equals(statusDTO.getApproval_dt())){
+        Date date = null;
+        if (null != statusDTO.getApproval_dt() && !"".equals(statusDTO.getApproval_dt())) {
             date = simpleDateFormat.parse(statusDTO.getApproval_dt());
-        }else {
+        } else {
             date = new Date();
         }
         boolean a = false;
-        if(null!=statusDTO.getAdj_no()&&!"".equals(statusDTO.getAdj_no())){
-            a=service.updateStatusAndDate(statusDTO.getAdj_no(), date);
-            log.info("【updateBillStatus】成功,statusDTO.getAdj_no():{}",statusDTO.getAdj_no());
+        if (null != statusDTO.getAdj_no() && !"".equals(statusDTO.getAdj_no())) {
+            a = service.updateStatusAndDate(statusDTO.getAdj_no(), date);
+            log.info("【updateBillStatus】成功,statusDTO.getAdj_no():{}", statusDTO.getAdj_no());
+        }
+        resultVO.setSuccess(String.valueOf(a));
+        return resultVO;
+    }
+
+    /**
+     * 修改主单号status
+     * */
+    @RequestMapping("modifyLogStatus")
+    public ResultVO modifyLogStatus(@RequestBody BillStatusDTO statusDTO) throws ParseException {
+        ResultVO resultVO = new ResultVO();
+        Date date = null;
+        if (null != statusDTO.getApproval_dt() && !"".equals(statusDTO.getApproval_dt())) {
+            date = simpleDateFormat.parse(statusDTO.getApproval_dt());
+        } else {
+            date = new Date();
+        }
+        boolean a = false;
+        if (null != statusDTO.getCode() && !"".equals(statusDTO.getCode())) {
+            a = logService.modifyLogStatus(statusDTO.getCode(), date);
+            log.info("【updateBillStatus】成功,statusDTO.getCode():{}", statusDTO.getCode());
         }
         resultVO.setSuccess(String.valueOf(a));
         return resultVO;

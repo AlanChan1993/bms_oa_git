@@ -2,6 +2,7 @@ package com.infinitus.bms_oa.mapper;
 
 import com.infinitus.bms_oa.pojo.Bms_OA_log;
 
+import java.util.Date;
 import java.util.List;
 
 public interface Bms_OA_logMapper {
@@ -13,4 +14,7 @@ public interface Bms_OA_logMapper {
     boolean delBmsOALog(String code);
 
     List<Bms_OA_log> selectBmsOaLogAll();
+
+    boolean modifyLogStatus(String code, Date approval_dt);
+
 }

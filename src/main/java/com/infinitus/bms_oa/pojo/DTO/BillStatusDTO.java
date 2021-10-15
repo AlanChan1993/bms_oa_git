@@ -7,4 +7,5 @@ public class BillStatusDTO {
     private String id;
     private String adj_no;
     private String approval_dt;
+    private String code;
 }

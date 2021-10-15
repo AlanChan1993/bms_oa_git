@@ -30,4 +30,9 @@
         select id,code,oa_flag,bill_code,summit_dt,syn_dt
          from bms_oa_log
     </select>
+
+    <update id="modifyLogStatus" >
+        update bms_oa_log set status='2',approval_dt=#{approval_dt}
+         where code=#{code,jdbcType=VARCHAR}
+    </update>
 </mapper>
