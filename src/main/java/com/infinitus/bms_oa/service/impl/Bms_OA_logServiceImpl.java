@@ -5,6 +5,8 @@ import com.infinitus.bms_oa.pojo.Bms_OA_log;
 import com.infinitus.bms_oa.service.Bms_OA_logService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -31,4 +33,11 @@ public class Bms_OA_logServiceImpl implements Bms_OA_logService {
     public List<Bms_OA_log> selectBmsOaLogAll() {
         return mapper.selectBmsOaLogAll();
     }
+
+    @Override
+    public boolean modifyLogStatus(String code, Date approval_dt) {
+        return mapper.modifyLogStatus(code,approval_dt);
+    }
+
+
 }
