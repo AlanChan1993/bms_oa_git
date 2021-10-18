@@ -247,7 +247,7 @@ public class InfinitusController {
             //4.update 主单号到流程表的 log_code字段
             logService.updateBillLogCode(code, adjList);
         } catch (Exception e) {
-            log.info("【getBillByCreator】，e:{}", e);
+            log.info("【getBillByCreator】执行失败，e:{}", e);
         }
     }
 
