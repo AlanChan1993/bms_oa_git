@@ -64,5 +64,10 @@ public class Bms_OA_logServiceImpl implements Bms_OA_logService {
         return a;
     }
 
+    @Override
+    public Bms_OA_log getBmsOaLogByCode(String code) {
+        return mapper.getBmsOaLogByCode(code);
+    }
+
 
 }

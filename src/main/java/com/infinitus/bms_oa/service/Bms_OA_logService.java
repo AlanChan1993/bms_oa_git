@@ -21,4 +21,7 @@ public interface Bms_OA_logService {
     boolean createBmsOaLog(String code,String bill_code,String creator);
 
     boolean updateBillLogCode(String code,List<String> stringList);
+
+    Bms_OA_log getBmsOaLogByCode(String code);
+
 }

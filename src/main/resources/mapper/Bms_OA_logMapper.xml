@@ -74,4 +74,13 @@
     </update>
 
 
+    <select id="getBmsOaLogByCode" resultMap="BaseResultMap">
+        select id,code,oa_flag,bill_code,summit_dt,syn_dt
+         from bms_oa_log
+         <where>
+             <if test="code !=null and code != ''">
+                 and  code =#{code,jdbcType=VARCHAR}
+             </if>
+         </where>
+    </select>
 </mapper>

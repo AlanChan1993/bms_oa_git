@@ -1,6 +1,8 @@
 package com.infinitus.bms_oa.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.infinitus.bms_oa.enums.CodeEnum;
+import com.infinitus.bms_oa.enums.OaFlagEnum;
 import com.infinitus.bms_oa.pojo.*;
 import com.infinitus.bms_oa.pojo.DTO.BillStatusDTO;
 import com.infinitus.bms_oa.pojo.VO.ResultVO;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -202,7 +205,7 @@ public class InfinitusController {
 
     /**
      * 修改主单号status
-     * */
+     */
     @RequestMapping("modifyLogStatus")
     public ResultVO modifyLogStatus(@RequestBody BillStatusDTO statusDTO) throws ParseException {
         ResultVO resultVO = new ResultVO();
@@ -222,13 +225,14 @@ public class InfinitusController {
     }
 
     /**
+     * 同步按钮接口
      * 1.拿到登录人Id，通过id去查找此id创建的，未同步的两张表的流程单
      * 2.查询出的adj_no逗号隔开
      * 3.插入bms_oa_log(生成主单号)
      * 4.update流程表中的log_code字段
-     * */
+     */
     @RequestMapping("getBillByCreator")
-    public String getBillByCreator(String create_id){
+    public void getBillByCreator(String create_id) {
         try {
             //1、取adj_no
             List<String> adjList = logService.getBmsOaLogByCreateId(create_id);
@@ -245,7 +249,29 @@ public class InfinitusController {
         } catch (Exception e) {
             log.info("【getBillByCreator】，e:{}", e);
         }
-        return "ok";
     }
 
+    /**
+     * 重置按钮接口
+     * 1.去除bill_code将其oa_flag改为0（表示需要重新同步）
+     * 2.将OA_flag改为8（oa已删除，bms已重置）
+     */
+    @RequestMapping("updateOaFlag")
+    public void updateOaFlag(BillStatusDTO dto) {
+        Bms_OA_log bms_oa_log = new Bms_OA_log();
+        String bill_code="";
+        List<String> strings = new ArrayList<>();
+        try {
+            if (null != dto.getCode()) {
+                bms_oa_log = logService.getBmsOaLogByCode(dto.getCode());
+                bill_code = bms_oa_log.getBill_code();
+                strings = Arrays.asList(bill_code.split(","));
+                service.updateOA_flag(OaFlagEnum.SUCCESS.getCode(), strings);
+                logService.updateOaFlag(OaFlagEnum.OA_DELETE.getCode(), dto.getCode());
+            }
+            log.info("【updateOaFlag】，修改oa_flag执行SUCCESS");
+        } catch (Exception ex) {
+            log.info("【updateOaFlag】，修改oa_flag执行错误，ex:{}", ex);
+        }
+    }
 }
