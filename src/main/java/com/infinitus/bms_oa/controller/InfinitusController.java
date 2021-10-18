@@ -1,7 +1,6 @@
 package com.infinitus.bms_oa.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.infinitus.bms_oa.enums.CodeEnum;
 import com.infinitus.bms_oa.enums.OaFlagEnum;
 import com.infinitus.bms_oa.pojo.*;
 import com.infinitus.bms_oa.pojo.DTO.BillStatusDTO;
@@ -236,6 +235,7 @@ public class InfinitusController {
         try {
             //1、取adj_no
             List<String> adjList = logService.getBmsOaLogByCreateId(create_id);
+            if (null == adjList || adjList.size() < 1)  return;
             //2.处理adj_no
             StringBuffer nos = new StringBuffer();
             adjList.stream().forEach(e -> {
@@ -262,13 +262,12 @@ public class InfinitusController {
         String bill_code="";
         List<String> strings = new ArrayList<>();
         try {
-            if (null != dto.getCode()) {
-                bms_oa_log = logService.getBmsOaLogByCode(dto.getCode());
-                bill_code = bms_oa_log.getBill_code();
-                strings = Arrays.asList(bill_code.split(","));
-                service.updateOA_flag(OaFlagEnum.SUCCESS.getCode(), strings);
-                logService.updateOaFlag(OaFlagEnum.OA_DELETE.getCode(), dto.getCode());
-            }
+            if (null == dto.getCode()||"".equals(dto.getCode())) return;
+            bms_oa_log = logService.getBmsOaLogByCode(dto.getCode());
+            bill_code = bms_oa_log.getBill_code();
+            strings = Arrays.asList(bill_code.split(","));
+            service.updateOA_flag(OaFlagEnum.SUCCESS.getCode(), strings);
+            logService.updateOaFlag(OaFlagEnum.OA_DELETE.getCode(), dto.getCode());
             log.info("【updateOaFlag】，修改oa_flag执行SUCCESS");
         } catch (Exception ex) {
             log.info("【updateOaFlag】，修改oa_flag执行错误，ex:{}", ex);
