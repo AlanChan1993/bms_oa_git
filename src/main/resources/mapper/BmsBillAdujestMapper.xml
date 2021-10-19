@@ -209,7 +209,7 @@
         where
         v.inactive_date>NOW() and v.delete_id is null
         and f.inactive_date>NOW() and f.delete_id is null
-        and p.type_id='2c94c6cf45d05e0e0145d42ff62960f8'
+        and p.type_id='2c94c6cf469485f80146984bfa433afd'
         <if test="adj_noArray!=null and adj_noArray!=''">
             and e.exception_adj_no in
             <foreach collection="adj_noArray" item="adj_noArray"

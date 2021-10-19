@@ -2,6 +2,7 @@ package com.infinitus.bms_oa.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.infinitus.bms_oa.enums.OaFlagEnum;
+import com.infinitus.bms_oa.enums.ResultEnum;
 import com.infinitus.bms_oa.pojo.*;
 import com.infinitus.bms_oa.pojo.DTO.BillStatusDTO;
 import com.infinitus.bms_oa.pojo.VO.ResultVO;
@@ -236,7 +237,7 @@ public class InfinitusController {
         try {
             //1、取adj_no
             List<String> adjList = logService.getBmsOaLogByCreateId(create_id);
-            if (null == adjList || adjList.size() < 1)  return "null";
+            if (null == adjList || adjList.size() < 1)  return ResultEnum.NODATA.getMsg();
             //2.处理adj_no
             StringBuffer nos = new StringBuffer();
             adjList.stream().forEach(e -> {
@@ -247,9 +248,9 @@ public class InfinitusController {
             logService.createBmsOaLog(code, nos.toString(), create_id);
             //4.update 主单号到流程表的 log_code字段
             logService.updateBillLogCode(code, adjList);
-            result="success";
+            result=ResultEnum.SUCCESS.getMsg();
         } catch (Exception e) {
-            result="fail";
+            result=ResultEnum.FALSE.getMsg();
             log.info("【getBillByCreator】执行失败，e:{}", e);
         }
         return result;
