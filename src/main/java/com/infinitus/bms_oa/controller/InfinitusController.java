@@ -231,11 +231,12 @@ public class InfinitusController {
      * 4.update流程表中的log_code字段
      */
     @RequestMapping("getBillByCreator")
-    public void getBillByCreator(String create_id) {
+    public String getBillByCreator(String create_id) {
+        String result="";
         try {
             //1、取adj_no
             List<String> adjList = logService.getBmsOaLogByCreateId(create_id);
-            if (null == adjList || adjList.size() < 1)  return;
+            if (null == adjList || adjList.size() < 1)  return "null";
             //2.处理adj_no
             StringBuffer nos = new StringBuffer();
             adjList.stream().forEach(e -> {
@@ -246,9 +247,12 @@ public class InfinitusController {
             logService.createBmsOaLog(code, nos.toString(), create_id);
             //4.update 主单号到流程表的 log_code字段
             logService.updateBillLogCode(code, adjList);
+            result="success";
         } catch (Exception e) {
+            result="fail";
             log.info("【getBillByCreator】执行失败，e:{}", e);
         }
+        return result;
     }
 
     /**
