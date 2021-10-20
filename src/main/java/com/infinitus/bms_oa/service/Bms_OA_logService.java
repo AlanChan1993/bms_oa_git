@@ -24,4 +24,7 @@ public interface Bms_OA_logService {
 
     Bms_OA_log getBmsOaLogByCode(String code);
 
+    List<Bms_OA_log> getBillCodeByStatus(String status);
+
+    boolean updateLogStatus(String status, List<String> list);
 }

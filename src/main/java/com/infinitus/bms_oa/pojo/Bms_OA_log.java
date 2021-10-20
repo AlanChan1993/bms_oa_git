@@ -13,4 +13,6 @@ public class Bms_OA_log {
     private Date summit_dt;//提交日期
     private Date syn_dt;//同步日期
     private String create_id;//合并人
+    private Date approval_dt;
+    private String status;
 }

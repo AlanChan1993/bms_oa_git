@@ -19,11 +19,16 @@ public class InfinitusUtil {
         infinitusDetailTablesRow.setCwkm(billAdjust.getFinance_account_no());
         infinitusDetailTablesRow.setDzje(billAdjust.getAdj_amount());
         String tznr=billAdjust.getAdj_type();
-        if ("01".equals(tznr)) {
+        if ("01".equals(tznr)&&billAdjust.getAdj_no().indexOf("IA-")>=0) {
             tznr = "运费费用调整";
-        } else if("02".equals(tznr)){
+        } else if("02".equals(tznr)&&billAdjust.getAdj_no().indexOf("IA-")>=0){
             tznr = "仓储费用调整";
+        }else if("01".equals(tznr)&&billAdjust.getAdj_no().indexOf("TZ-")>=0){
+            tznr = "运输扣款调整";
+        }else if("02".equals(tznr)&&billAdjust.getAdj_no().indexOf("TZ-")>=0){
+            tznr = "仓储扣款调整";
         }
+
         infinitusDetailTablesRow.setDznr(tznr);
         infinitusDetailTablesRow.setDzyy(billAdjust.getAdj_reason());
         infinitusDetailTablesRow.setDzyysm(billAdjust.getComments());

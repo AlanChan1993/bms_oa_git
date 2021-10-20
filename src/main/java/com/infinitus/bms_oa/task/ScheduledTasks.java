@@ -1,6 +1,7 @@
 package com.infinitus.bms_oa.task;
 
 import com.alibaba.fastjson.JSONObject;
+import com.infinitus.bms_oa.enums.BmsOaLogStatusEnum;
 import com.infinitus.bms_oa.enums.OaFlagEnum;
 import com.infinitus.bms_oa.pojo.*;
 import com.infinitus.bms_oa.service.BmsBillAdujestService;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -30,18 +32,32 @@ public class ScheduledTasks {
     @Value("${BMS.URL.billToOA}")
     private String  url;
 
-    private  static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    private  static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM");
 
     /**
      * 每30s处理一次   1000 * 1 * 30
      */
-    @Scheduled(fixedRate = 1000 * 2 * 30)
+    //@Scheduled(fixedRate = 1000 * 1 * 30)
     public void bmsToOA() {
         String keyValue = simpleDateFormat.format(new Date());
         try {
-            log.info("【定时任务 处理开始】：keyValue:{}", keyValue);
+            log.info("【定时任务bmsToOA()处理开始】：keyValue:{}", keyValue);
             String statusFlag = BmsSynOA();
-            log.info("【定时任务 处理结束】:statusFlag:{}", statusFlag);
+            log.info("【定时任务bmsToOA()处理结束】:statusFlag:{}", statusFlag);
+        } catch (Exception ex) {
+            log.info("【ScheduledTasks】执行错误:ex:{}", ex);
+        }
+    }
+
+    /**
+     * 每30s处理一次   1000 * 1 * 30
+     */
+    @Scheduled(fixedRate = 1000 * 1 * 15)
+    public void updateBillStatus() {
+        String keyValue = simpleDateFormat.format(new Date());
+        try {
+            log.info("【定时任务bmsToOA()处理开始】：keyValue:{}", keyValue);
+            scheduledBmsOaLog();
         } catch (Exception ex) {
             log.info("【ScheduledTasks】执行错误:ex:{}", ex);
         }
@@ -131,10 +147,33 @@ public class ScheduledTasks {
     }
 
     /**
-     * 定时巡查bms_oa_log表，status=2，则为已经同步并审批的记录
-     * 将此条记录中的两张流程表中的记录的审批状态status=20，审批时间修改
+     * 1.定时巡查bms_oa_log表，status=2，则为已经同步并审批的记录
+     * 2.将此条记录中的两张流程表中的记录的审批状态status=20，审批时间修改
+     * 3.bms_oa_log 审批状态，2：已审批，需改流程表状态；4：已改
      */
-    public void scheduledBmsOaLog() {//todo
+    public void scheduledBmsOaLog() {
+        try {
+            //查询需要更新流程表的数据
+            List<Bms_OA_log> logList = logService.getBillCodeByStatus(BmsOaLogStatusEnum.APPROVAL.getCodeString());
+            if (logList.size() < 1) return;
+            logList.stream().forEach(e->{
+                String billCode = e.getBill_code();
+                List<String> stringList = Arrays.asList(billCode.split(","));
+                //更新流程表status与审批时间
+                billService.updateStatusAndApeDate(stringList, e.getApproval_dt(), "20");
+
+            });
+            List<String> list = new ArrayList<>();
+            logList.stream().forEach(e->{
+                list.add(e.getCode());
+            });
+            if (list.size() < 1) return;
+            //改变bms_oa_log的status状态
+            logService.updateLogStatus(BmsOaLogStatusEnum.APPROVALED.getCodeString(), list);
+            log.info("【scheduledBmsOaLog】，执行success,logList:{}", logList);
+        } catch (Exception e) {
+            log.info("【scheduledBmsOaLog】，执行错误，e:{}", e);
+        }
 
     }
 

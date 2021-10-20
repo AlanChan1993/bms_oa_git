@@ -47,5 +47,9 @@ public interface BmsBillAdujestMapper {
 
     boolean updateOaFlag_all(Integer oa_flag,List<String> noList);
 
-    boolean updateOaFlagEx_all(Integer oa_flag,List<String> noList);
+    boolean updateOaFlagEx_all(Integer oa_flag, List<String> noList);
+
+    boolean updateStatusAndApeDate(List<String> noList,Date approval_dt,String status);
+
+    boolean updateExceptionStatusAndApeDate(List<String> noList,Date approval_dt,String status);
 }

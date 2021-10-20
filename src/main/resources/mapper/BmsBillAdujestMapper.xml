@@ -217,6 +217,7 @@
                 #{adj_noArray}
             </foreach>
         </if>
+        order by settle_year_month
     </select>
 
     <update id="updateOaFlag_all" >
@@ -238,5 +239,22 @@
     </update>
 
 
+    <update id="updateStatusAndApeDate" >
+        update bms_bill_adjust set status=#{status},approval_dt=#{approval_dt}
+        where adj_no in
+        <foreach collection="noList" item="noList"
+                 index="index" open="(" close=")" separator=",">
+            #{noList}
+        </foreach>
+    </update>
+
+    <update id="updateExceptionStatusAndApeDate" >
+        update bms_exception_adj set status=#{status},approval_dt=#{approval_dt}
+        where exception_adj_no in
+        <foreach collection="noList" item="noList"
+                 index="index" open="(" close=")" separator=",">
+            #{noList}
+        </foreach>
+    </update>
 
 </mapper>

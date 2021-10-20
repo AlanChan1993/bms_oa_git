@@ -69,5 +69,15 @@ public class Bms_OA_logServiceImpl implements Bms_OA_logService {
         return mapper.getBmsOaLogByCode(code);
     }
 
+    @Override
+    public List<Bms_OA_log> getBillCodeByStatus(String status) {
+        return mapper.getBillCodeByStatus(status);
+    }
+
+    @Override
+    public boolean updateLogStatus(String status, List<String> list) {
+        return mapper.updateLogStatus(status, list);
+    }
+
 
 }

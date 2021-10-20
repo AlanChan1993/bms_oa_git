@@ -10,6 +10,8 @@
         <result column="summit_dt" property="summit_dt" jdbcType="TIMESTAMP"></result>
         <result column="syn_dt" property="syn_dt" jdbcType="TIMESTAMP"></result>
         <result column="creator" property="create_id" jdbcType="VARCHAR"></result>
+        <result column="status" property="status" jdbcType="VARCHAR"></result>
+        <result column="approval_dt" property="approval_dt" jdbcType="TIMESTAMP"></result>
     </resultMap>
 
     <select id="getBmsOaLog" resultMap="BaseResultMap">
@@ -83,4 +85,23 @@
              </if>
          </where>
     </select>
+
+    <select id="getBillCodeByStatus" resultMap="BaseResultMap">
+        select id,code,oa_flag,bill_code,summit_dt,syn_dt,status,approval_dt
+        from bms_oa_log
+        <where>
+            <if test="status !=null and status != ''">
+                and  status =#{status,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateLogStatus" >
+        update bms_oa_log set status=#{status}
+        where code in
+        <foreach collection="codeList" item="codeList"
+                 index="index" open="(" close=")" separator=",">
+            #{codeList}
+        </foreach>
+    </update>
 </mapper>

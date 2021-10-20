@@ -122,5 +122,17 @@ public class BmsBillAdjustServiceImpl implements BmsBillAdujestService {
         return b;
     }
 
+    @Override
+    public boolean updateStatusAndApeDate(List<String> adj_noArray, Date approval_dt, String status) {
+        boolean b = false;
+        try {
+            bmsBillAdujestMapper.updateStatusAndApeDate(adj_noArray, approval_dt, status);
+            bmsBillAdujestMapper.updateExceptionStatusAndApeDate(adj_noArray, approval_dt, status);
+            b = true;
+        } catch (Exception e) {
+            log.info("【updateOA_flag】改变oa_flag出错,e:{}",e);
+        }
+        return b;
+    }
 
 }
