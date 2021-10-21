@@ -217,6 +217,22 @@
                 #{adj_noArray}
             </foreach>
         </if>
+        UNION ALL
+        select e.id,u.login_name as create_id,e.exempt_no as adj_no,e.exempt_type,e.comments,e.exempt_dt as adj_dt,e.settle_year_month,e.exempt_amt as adj_amount,
+        '' as settle_wh_code,'' as vendor_no,'' as owner_key,
+        '' as finance_account_no,p.name as adj_reason,e.attachment
+        from bms_exempt e
+        left join plat_code p on e.exempt_reason=p.code
+        left join plat_login_user u on e.create_id=u.id
+        where
+        p.type_id='2c94c6cf45d05e0e0145d430336f60f9'
+        <if test="adj_noArray!=null and adj_noArray!=''">
+            and e.exempt_no in
+            <foreach collection="adj_noArray" item="adj_noArray"
+                     index="index" open="(" close=")" separator=",">
+                #{adj_noArray}
+            </foreach>
+        </if>
         order by settle_year_month
     </select>
 
@@ -238,6 +254,15 @@
         </foreach>
     </update>
 
+    <update id="updateOaFlagExExempt_all" >
+        update bms_exempt set oa_flag=#{oa_flag}
+        where exempt_no in
+        <foreach collection="noList" item="noList"
+                 index="index" open="(" close=")" separator=",">
+            #{noList}
+        </foreach>
+    </update>
+
 
     <update id="updateStatusAndApeDate" >
         update bms_bill_adjust set status=#{status},approval_dt=#{approval_dt}
@@ -251,6 +276,15 @@
     <update id="updateExceptionStatusAndApeDate" >
         update bms_exception_adj set status=#{status},approval_dt=#{approval_dt}
         where exception_adj_no in
+        <foreach collection="noList" item="noList"
+                 index="index" open="(" close=")" separator=",">
+            #{noList}
+        </foreach>
+    </update>
+
+    <update id="updateExceptionExemptStatusAndApeDate" >
+        update bms_exempt set status=#{status},approval_dt=#{approval_dt}
+        where exempt_no in
         <foreach collection="noList" item="noList"
                  index="index" open="(" close=")" separator=",">
             #{noList}

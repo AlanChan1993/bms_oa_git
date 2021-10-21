@@ -226,7 +226,7 @@ public class InfinitusController {
 
     /**
      * 同步按钮接口
-     * 1.拿到登录人Id，通过id去查找此id创建的，未同步的两张表的流程单
+     * 1.拿到登录人Id，通过id去查找此id创建的，未同步的三张表的流程单
      * 2.查询出的adj_no逗号隔开
      * 3.插入bms_oa_log(生成主单号)
      * 4.update流程表中的log_code字段

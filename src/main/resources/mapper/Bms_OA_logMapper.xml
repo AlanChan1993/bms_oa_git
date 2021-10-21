@@ -50,6 +50,12 @@
         <if test="create_id != null and create_id !=''">
             and create_id=#{create_id}
         </if>
+        UNION ALL
+        select exempt_no as adj_no from bms_exempt
+        where (oa_flag='0' or oa_flag is null or oa_flag = null or oa_flag='')
+        <if test="create_id != null and create_id !=''">
+            and create_id=#{create_id}
+        </if>
     </select>
 
     <insert id="createBmsOaLog" parameterType="com.infinitus.bms_oa.pojo.Bms_OA_log">
@@ -69,6 +75,15 @@
     <update id="updateBillLogCodeEx" >
         update bms_exception_adj set log_code=#{code}
         where exception_adj_no in
+        <foreach collection="stringList" item="stringList"
+                 index="index" open="(" close=")" separator=",">
+            #{stringList}
+        </foreach>
+    </update>
+
+    <update id="updateBillLogCodeExEmpt" >
+        update bms_exempt set log_code=#{code}
+        where exempt_no in
         <foreach collection="stringList" item="stringList"
                  index="index" open="(" close=")" separator=",">
             #{stringList}

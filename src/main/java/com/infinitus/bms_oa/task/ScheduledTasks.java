@@ -32,12 +32,14 @@ public class ScheduledTasks {
     @Value("${BMS.URL.billToOA}")
     private String  url;
 
-    private  static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM");
+    private  static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+
+    private  static final SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /**
      * 每30s处理一次   1000 * 1 * 30
      */
-    //@Scheduled(fixedRate = 1000 * 1 * 30)
+    @Scheduled(fixedRate = 1000 * 2 * 30)
     public void bmsToOA() {
         String keyValue = simpleDateFormat.format(new Date());
         try {
@@ -50,16 +52,17 @@ public class ScheduledTasks {
     }
 
     /**
-     * 每30s处理一次   1000 * 1 * 30
+     * 每15s处理一次   1000 * 1 * 15
      */
-    @Scheduled(fixedRate = 1000 * 1 * 15)
+    @Scheduled(fixedRate = 1000 * 3 * 15)
     public void updateBillStatus() {
         String keyValue = simpleDateFormat.format(new Date());
         try {
-            log.info("【定时任务bmsToOA()处理开始】：keyValue:{}", keyValue);
+            log.info("【定时任务updateBillStatus()处理开始】：keyValue:{}", keyValue);
             scheduledBmsOaLog();
+            log.info("【定时任务updateBillStatus()处理结束】");
         } catch (Exception ex) {
-            log.info("【ScheduledTasks】执行错误:ex:{}", ex);
+            log.info("【ScheduledTasks】updateBillStatus执行错误:ex:{}", ex);
         }
     }
 
@@ -110,7 +113,10 @@ public class ScheduledTasks {
             List<BmsBillAdjust> adjustList = billService.getBillListDetail(noArray);
             //3.打包数据提交接口:
             for (int i = 0; i < adjustList.size(); i++) {
-                table.setJsny(simpleDateFormat.format(adjustList.get(i).getSettle_year_month()));//需求指出每个结算年月一致，就随机取最后一个为准
+                if (null == adjustList.get(i).getSettle_year_month() || "".equals(adjustList.get(i).getSettle_year_month())) {
+                    adjustList.get(i).setSettle_year_month(new Date());
+                }
+                table.setJsny(simpleDateFormat2.format(adjustList.get(i).getSettle_year_month()));//需求指出每个结算年月一致，就随机取最后一个为准
                 //封装每行明细的数据
                 InfinitusDetailTablesRow infinitusDetailTablesRow
                         = new InfinitusUtil().setInfinitusDetailTablesRow(adjustList.get(i));

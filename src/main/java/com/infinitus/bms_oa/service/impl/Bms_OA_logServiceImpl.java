@@ -57,6 +57,7 @@ public class Bms_OA_logServiceImpl implements Bms_OA_logService {
         try {
             mapper.updateBillLogCode(code,stringList);
             mapper.updateBillLogCodeEx(code,stringList);
+            mapper.updateBillLogCodeExEmpt(code,stringList);
             a = true;
         } catch (Exception ex) {
             log.info("【updateBillLogCode】修改log_code失败，ex:{}", ex);

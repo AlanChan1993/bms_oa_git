@@ -115,6 +115,7 @@ public class BmsBillAdjustServiceImpl implements BmsBillAdujestService {
         try {
             bmsBillAdujestMapper.updateOaFlag_all(oa_flag, noList);
             bmsBillAdujestMapper.updateOaFlagEx_all(oa_flag, noList);
+            bmsBillAdujestMapper.updateOaFlagExExempt_all(oa_flag, noList);
             b = true;
         } catch (Exception e) {
             log.info("【updateOA_flag】改变oa_flag出错,e:{}",e);
@@ -128,6 +129,7 @@ public class BmsBillAdjustServiceImpl implements BmsBillAdujestService {
         try {
             bmsBillAdujestMapper.updateStatusAndApeDate(adj_noArray, approval_dt, status);
             bmsBillAdujestMapper.updateExceptionStatusAndApeDate(adj_noArray, approval_dt, status);
+            bmsBillAdujestMapper.updateExceptionExemptStatusAndApeDate(adj_noArray, approval_dt, status);
             b = true;
         } catch (Exception e) {
             log.info("【updateOA_flag】改变oa_flag出错,e:{}",e);

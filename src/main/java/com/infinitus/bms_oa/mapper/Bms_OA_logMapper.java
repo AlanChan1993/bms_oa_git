@@ -25,6 +25,8 @@ public interface Bms_OA_logMapper {
 
     boolean updateBillLogCodeEx(String code,List<String> stringList);
 
+    boolean updateBillLogCodeExEmpt(String code,List<String> stringList);
+
     Bms_OA_log getBmsOaLogByCode(String code);
 
     List<Bms_OA_log> getBillCodeByStatus(String status);
