@@ -167,7 +167,6 @@ public class ScheduledTasks {
                 List<String> stringList = Arrays.asList(billCode.split(","));
                 //更新流程表status与审批时间
                 billService.updateStatusAndApeDate(stringList, e.getApproval_dt(), "20");
-
             });
             List<String> list = new ArrayList<>();
             logList.stream().forEach(e->{
