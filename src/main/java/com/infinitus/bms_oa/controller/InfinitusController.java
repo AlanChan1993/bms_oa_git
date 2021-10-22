@@ -97,7 +97,6 @@ public class InfinitusController {
                     infinitusDetailTablesRow.setSqtjrq(simpleDateFormat.format(list.get(i).getAdj_dt()));//申请提交日期
                     infinitusDetailTablesRow.setJsny(simpleDateFormat.format(list.get(i).getSettle_year_month()));
                     infinitusDetailTablesRow.setSqr(login_name);
-                    //todo 判断 费用调整还是运输
                     if (list.get(i).getAdj_no().indexOf("IA-") >= 0) {
                         if (null != list.get(i).getOrg_fee()) {
                             table.setZje(list.get(i).getOrg_fee() + list.get(i).getAdj_amount());
@@ -116,7 +115,7 @@ public class InfinitusController {
                             //table.setCckkdzje(list.get(i).getAdj_amount());
                         }
                     } else if (list.get(i).getAdj_no().indexOf("TZ-") >= 0) {
-                        table.setZje(list.get(i).getAdj_amount());//todo 总金额
+                        table.setZje(list.get(i).getAdj_amount());
                         //判断调整类型(运输或是仓储)
                         if ("01".equals(list.get(i).getAdj_type())) {
                             table.setYsfydzje(list.get(i).getAdj_amount());

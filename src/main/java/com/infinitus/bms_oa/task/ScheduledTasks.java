@@ -123,7 +123,7 @@ public class ScheduledTasks {
 
                 //回收infinitusDetailTablesRow==>>infinitusDetailTablesRowList
                 infinitusDetailTablesRowList.add(infinitusDetailTablesRow);
-                d += adjustList.get(i).getAdj_amount();//todo 总金额计算
+                d += adjustList.get(i).getAdj_amount();
             }
             table.setZje(d);
             table.setDh(e.getCode());
