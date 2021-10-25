@@ -247,6 +247,7 @@ public class InfinitusController {
             logService.createBmsOaLog(code, nos.toString(), create_id);
             //4.update 主单号到流程表的 log_code字段
             logService.updateBillLogCode(code, adjList);
+            service.updateOA_flag(OaFlagEnum.SUCCESS.getCode(), adjList);
             result=ResultEnum.SUCCESS.getMsg();
         } catch (Exception e) {
             result=ResultEnum.FALSE.getMsg();
@@ -270,7 +271,7 @@ public class InfinitusController {
             bms_oa_log = logService.getBmsOaLogByCode(dto.getCode());
             bill_code = bms_oa_log.getBill_code();
             strings = Arrays.asList(bill_code.split(","));
-            service.updateOA_flag(OaFlagEnum.SUCCESS.getCode(), strings);
+            service.updateOA_flag(OaFlagEnum.NULL.getCode(), strings);
             logService.updateOaFlag(OaFlagEnum.OA_DELETE.getCode(), dto.getCode());
             log.info("【updateOaFlag】，修改oa_flag执行SUCCESS");
         } catch (Exception ex) {
