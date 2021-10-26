@@ -259,7 +259,8 @@ public class InfinitusController {
     /**
      * 重置按钮接口
      * 1.去除bill_code将其oa_flag改为0（表示需要重新同步）
-     * 2.将OA_flag改为8（oa已删除，bms已重置）
+     * 2.将OA_flag改为8（oa已删除，bms已重置）需求变更为 重新同步 无需重置后再生成一条
+     *
      */
     @RequestMapping("updateOaFlag")
     public void updateOaFlag(BillStatusDTO dto) {
@@ -272,7 +273,7 @@ public class InfinitusController {
            /* bill_code = bms_oa_log.getBill_code();
             strings = Arrays.asList(bill_code.split(","));*/
             service.updateOA_flag(OaFlagEnum.NULL.getCode(), bms_oa_log.getCode());
-            logService.updateOaFlag(OaFlagEnum.OA_DELETE.getCode(), dto.getCode());
+            logService.updateOaFlag(OaFlagEnum.NULL.getCode(), dto.getCode());
             log.info("【updateOaFlag】，修改oa_flag执行SUCCESS");
         } catch (Exception ex) {
             log.info("【updateOaFlag】，修改oa_flag执行错误，ex:{}", ex);
