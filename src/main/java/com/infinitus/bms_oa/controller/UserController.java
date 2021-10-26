@@ -9,6 +9,7 @@ import com.infinitus.bms_oa.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,6 +52,7 @@ public class UserController {
 
     @ResponseBody
     @RequestMapping("hello")
+    //@Transactional
     public Infinitus hello(Integer id) {
         try {
             infinitus = infinitusService.getInfinitusById(id);
