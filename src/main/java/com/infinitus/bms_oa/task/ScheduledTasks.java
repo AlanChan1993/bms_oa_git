@@ -105,12 +105,14 @@ public class ScheduledTasks {
             Double d = new Double(0);//用于计算总金额
 
             //2.用单号查找对应流程表详细数据
-            String[] nos = e.getBill_code().split(",");
+           /* String[] nos = e.getBill_code().split(",");
             if(null==nos||"".equals(nos))return;
             for (String no : nos) {
                 noArray.add(no);
-            }
-            List<BmsBillAdjust> adjustList = billService.getBillListDetail(noArray);
+            }*/
+
+
+            List<BmsBillAdjust> adjustList = billService.getBillListDetail(e.getCode());
             //3.打包数据提交接口:
             for (int i = 0; i < adjustList.size(); i++) {
                 if (null == adjustList.get(i).getSettle_year_month() || "".equals(adjustList.get(i).getSettle_year_month())) {
@@ -138,13 +140,13 @@ public class ScheduledTasks {
             JSONObject resultJson = Httputil.doPostJson(url,jsonObject,"");
             log.info("【提交接口返回数据resultJson】----:resultJson:{}", resultJson);
             if (null != resultJson.get("success") && resultJson.get("success").equals(true)) {
-                log.info("【BmsSynOA修改已传oa_flag的值】···noArray:{}", noArray);
-                billService.updateOA_flag(OaFlagEnum.SUCCESS.getCode(), noArray);//提交成功则改变oa_flag的值0 标识未上传  2 已经上传  4上传失败
+                log.info("【BmsSynOA修改已传oa_flag的值】,e.getCode():{}", e.getCode());
+                billService.updateOA_flag(OaFlagEnum.SUCCESS.getCode(), e.getCode());//提交成功则改变oa_flag的值0 标识未上传  2 已经上传  4上传失败
                 logService.updateOaFlag(OaFlagEnum.SUCCESS.getCode(), e.getCode());
                 log.info("【BmsSynOA修改已传oa_flag的值】", OaFlagEnum.SUCCESS.getMsg());
             } else {
-                log.info("【BmsSynOA修改传输失败的oa_flag的值】···noArray:{}", noArray);
-                billService.updateOA_flag(OaFlagEnum.FALSE.getCode(), noArray);
+                log.info("【BmsSynOA修改传输失败的oa_flag的值】,e.getCode():{}", e.getCode());
+                billService.updateOA_flag(OaFlagEnum.FALSE.getCode(), e.getCode());
                 logService.updateOaFlag(OaFlagEnum.FALSE.getCode(), e.getCode());
                 log.info("【BmsSynOA修改传输失败的oa_flag的值】", OaFlagEnum.FALSE.getMsg());
             }
@@ -162,16 +164,18 @@ public class ScheduledTasks {
             //查询需要更新流程表的数据
             List<Bms_OA_log> logList = logService.getBillCodeByStatus(BmsOaLogStatusEnum.APPROVAL.getCodeString());
             if (logList.size() < 1) return;
-            logList.stream().forEach(e->{
-                String billCode = e.getBill_code();
-                List<String> stringList = Arrays.asList(billCode.split(","));
-                //更新流程表status与审批时间
-                billService.updateStatusAndApeDate(stringList, e.getApproval_dt(), "20");
-            });
             List<String> list = new ArrayList<>();
             logList.stream().forEach(e->{
+                /*String billCode = e.getBill_code();
+                List<String> stringList = Arrays.asList(billCode.split(","));*/
+                //更新流程表status与审批时间
+                billService.updateStatusAndApeDate(e.getCode(), e.getApproval_dt(), "20");
                 list.add(e.getCode());
             });
+           /* List<String> list = new ArrayList<>();
+            logList.stream().forEach(e->{
+                list.add(e.getCode());
+            });*/
             if (list.size() < 1) return;
             //改变bms_oa_log的status状态
             logService.updateLogStatus(BmsOaLogStatusEnum.APPROVALED.getCodeString(), list);

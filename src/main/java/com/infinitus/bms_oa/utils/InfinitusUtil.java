@@ -27,9 +27,9 @@ public class InfinitusUtil {
             tznr = "运输扣款调整";
         }else if("02".equals(tznr)&&billAdjust.getAdj_no().indexOf("TZ-")>=0){
             tznr = "仓储扣款调整";
-        }else if("01".equals(tznr)&&billAdjust.getAdj_no().indexOf("EK-")>=0){
+        }else if("01".equals(tznr)&&(null==billAdjust.getAdj_no()||"".equals(billAdjust.getAdj_no()))){
             tznr = "运输异常调整";
-        }else if("02".equals(tznr)&&billAdjust.getAdj_no().indexOf("EK-")>=0){
+        }else if("02".equals(tznr)&&(null==billAdjust.getAdj_no()||"".equals(billAdjust.getAdj_no()))){
             tznr = "仓储异常调整";
         }
 

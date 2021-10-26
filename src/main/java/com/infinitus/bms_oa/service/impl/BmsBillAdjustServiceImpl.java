@@ -105,17 +105,17 @@ public class BmsBillAdjustServiceImpl implements BmsBillAdujestService {
     }
 
     @Override
-    public List<BmsBillAdjust> getBillListDetail(List<String> adj_noArray) {
-        return bmsBillAdujestMapper.getBillListDetail(adj_noArray);
+    public List<BmsBillAdjust> getBillListDetail(String code) {
+        return bmsBillAdujestMapper.getBillListDetail(code);
     }
 
     @Override
-    public boolean updateOA_flag(Integer oa_flag, List<String> noList) {
+    public boolean updateOA_flag(Integer oa_flag,String code) {
         boolean b = false;
         try {
-            bmsBillAdujestMapper.updateOaFlag_all(oa_flag, noList);
-            bmsBillAdujestMapper.updateOaFlagEx_all(oa_flag, noList);
-            bmsBillAdujestMapper.updateOaFlagExExempt_all(oa_flag, noList);
+            bmsBillAdujestMapper.updateOaFlag_all(oa_flag, code);
+            bmsBillAdujestMapper.updateOaFlagEx_all(oa_flag, code);
+            bmsBillAdujestMapper.updateOaFlagExExempt_all(oa_flag, code);
             b = true;
         } catch (Exception e) {
             log.info("【updateOA_flag】改变oa_flag出错,e:{}",e);
@@ -124,12 +124,12 @@ public class BmsBillAdjustServiceImpl implements BmsBillAdujestService {
     }
 
     @Override
-    public boolean updateStatusAndApeDate(List<String> adj_noArray, Date approval_dt, String status) {
+    public boolean updateStatusAndApeDate(String Code, Date approval_dt, String status) {
         boolean b = false;
         try {
-            bmsBillAdujestMapper.updateStatusAndApeDate(adj_noArray, approval_dt, status);
-            bmsBillAdujestMapper.updateExceptionStatusAndApeDate(adj_noArray, approval_dt, status);
-            bmsBillAdujestMapper.updateExceptionExemptStatusAndApeDate(adj_noArray, approval_dt, status);
+            bmsBillAdujestMapper.updateStatusAndApeDate(Code, approval_dt, status);
+            bmsBillAdujestMapper.updateExceptionStatusAndApeDate(Code, approval_dt, status);
+            bmsBillAdujestMapper.updateExceptionExemptStatusAndApeDate(Code, approval_dt, status);
             b = true;
         } catch (Exception e) {
             log.info("【updateOA_flag】改变oa_flag出错,e:{}",e);

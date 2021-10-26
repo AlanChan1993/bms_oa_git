@@ -238,16 +238,16 @@ public class InfinitusController {
             List<String> adjList = logService.getBmsOaLogByCreateId(create_id);
             if (null == adjList || adjList.size() < 1)  return ResultEnum.NODATA.getMsg();
             //2.处理adj_no
-            StringBuffer nos = new StringBuffer();
+            /*StringBuffer nos = new StringBuffer();
             adjList.stream().forEach(e -> {
                 nos.append(e).append(",");
-            });
+            });*/
             //3.生成主单号,创建bms_oa_log
             String code = "BMS-" + new DateUtil().getNowDate();
-            logService.createBmsOaLog(code, nos.toString(), create_id);
+            logService.createBmsOaLog(code, "", create_id);
             //4.update 主单号到流程表的 log_code字段
             logService.updateBillLogCode(code, adjList);
-            service.updateOA_flag(OaFlagEnum.SUCCESS.getCode(), adjList);
+            service.updateOA_flag(OaFlagEnum.SUCCESS.getCode(), code);
             result=ResultEnum.SUCCESS.getMsg();
         } catch (Exception e) {
             result=ResultEnum.FALSE.getMsg();
@@ -269,9 +269,9 @@ public class InfinitusController {
         try {
             if (null == dto.getCode()||"".equals(dto.getCode())) return;
             bms_oa_log = logService.getBmsOaLogByCode(dto.getCode());
-            bill_code = bms_oa_log.getBill_code();
-            strings = Arrays.asList(bill_code.split(","));
-            service.updateOA_flag(OaFlagEnum.NULL.getCode(), strings);
+           /* bill_code = bms_oa_log.getBill_code();
+            strings = Arrays.asList(bill_code.split(","));*/
+            service.updateOA_flag(OaFlagEnum.NULL.getCode(), bms_oa_log.getCode());
             logService.updateOaFlag(OaFlagEnum.OA_DELETE.getCode(), dto.getCode());
             log.info("【updateOaFlag】，修改oa_flag执行SUCCESS");
         } catch (Exception ex) {

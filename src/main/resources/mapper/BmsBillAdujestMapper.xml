@@ -189,12 +189,8 @@
         v.inactive_date>NOW() and v.delete_id is null
         and f.inactive_date>NOW() and f.delete_id is null
         and p.type_id='2c94c6cf45d05e0e0145d42ff62960f8'
-        <if test="adj_noArray!=null and adj_noArray!=''">
-            and b.adj_no in
-            <foreach collection="adj_noArray" item="adj_noArray"
-                     index="index" open="(" close=")" separator=",">
-                #{adj_noArray}
-            </foreach>
+        <if test="code!=null and code!=''">
+            and b.log_code=#{code}
         </if>
         UNION ALL
         select e.id,u.login_name as create_id,e.exception_adj_no as adj_no,e.adj_type,e.comments,e.adj_dt,e.adj_year_month as settle_year_month,e.adj_amount,
@@ -210,85 +206,59 @@
         v.inactive_date>NOW() and v.delete_id is null
         and f.inactive_date>NOW() and f.delete_id is null
         and p.type_id='2c94c6cf469485f80146984bfa433afd'
-        <if test="adj_noArray!=null and adj_noArray!=''">
-            and e.exception_adj_no in
-            <foreach collection="adj_noArray" item="adj_noArray"
-                     index="index" open="(" close=")" separator=",">
-                #{adj_noArray}
-            </foreach>
+        <if test="code!=null and code!=''">
+            and e.log_code=#{code}
         </if>
         UNION ALL
-        select e.id,u.login_name as create_id,e.exempt_no as adj_no,e.exempt_type,e.comments,e.exempt_dt as adj_dt,e.settle_year_month,e.exempt_amt as adj_amount,
-        '' as settle_wh_code,'' as vendor_no,'' as owner_key,
-        '' as finance_account_no,p.name as adj_reason,e.attachment
+        select  '' as id,u.login_name as create_id,'' as adj_no,e.exempt_type,e.comments,e.exempt_dt as adj_dt,e.settle_year_month,sum(e.exempt_amt) as adj_amount,
+        w.wh_name as settle_wh_code,v.vendor_name as vendor_no,b.owner_key,
+        f.account_name as finance_account_no,p.name as adj_reason,e.attachment
         from bms_exempt e
+        left join bms_exception b on e.exception_no = b.exception_no
+        left join  bms_warehouse w on b.billto_wh_code=w.wh_code
+        left join bms_vendor v on b.vendor_code=v.vendor_code
         left join plat_code p on e.exempt_reason=p.code
         left join plat_login_user u on e.create_id=u.id
+        left join bms_finance_account f on b.account_id=f.id
         where
         p.type_id='2c94c6cf45d05e0e0145d430336f60f9'
-        <if test="adj_noArray!=null and adj_noArray!=''">
-            and e.exempt_no in
-            <foreach collection="adj_noArray" item="adj_noArray"
-                     index="index" open="(" close=")" separator=",">
-                #{adj_noArray}
-            </foreach>
+        and v.inactive_date>NOW() and v.delete_id is null
+        <if test="code!=null and code!=''">
+            and e.log_code=#{code}
         </if>
+        group by adj_reason,settle_wh_code,vendor_no,owner_key,account_name
         order by settle_year_month
     </select>
 
     <update id="updateOaFlag_all" >
         update bms_bill_adjust set oa_flag=#{oa_flag}
-         where adj_no in
-        <foreach collection="noList" item="noList"
-                 index="index" open="(" close=")" separator=",">
-            #{noList}
-        </foreach>
+         where log_code=#{code}
     </update>
 
     <update id="updateOaFlagEx_all" >
         update bms_exception_adj set oa_flag=#{oa_flag}
-        where exception_adj_no in
-        <foreach collection="noList" item="noList"
-                 index="index" open="(" close=")" separator=",">
-            #{noList}
-        </foreach>
+        where log_code=#{code}
     </update>
 
     <update id="updateOaFlagExExempt_all" >
         update bms_exempt set oa_flag=#{oa_flag}
-        where exempt_no in
-        <foreach collection="noList" item="noList"
-                 index="index" open="(" close=")" separator=",">
-            #{noList}
-        </foreach>
+        where log_code=#{code}
     </update>
 
 
     <update id="updateStatusAndApeDate" >
         update bms_bill_adjust set status=#{status},approval_dt=#{approval_dt}
-        where adj_no in
-        <foreach collection="noList" item="noList"
-                 index="index" open="(" close=")" separator=",">
-            #{noList}
-        </foreach>
+        where log_code=#{Code}
     </update>
 
     <update id="updateExceptionStatusAndApeDate" >
         update bms_exception_adj set status=#{status},approval_dt=#{approval_dt}
-        where exception_adj_no in
-        <foreach collection="noList" item="noList"
-                 index="index" open="(" close=")" separator=",">
-            #{noList}
-        </foreach>
+        where  log_code=#{Code}
     </update>
 
     <update id="updateExceptionExemptStatusAndApeDate" >
         update bms_exempt set status=#{status},approval_dt=#{approval_dt}
-        where exempt_no in
-        <foreach collection="noList" item="noList"
-                 index="index" open="(" close=")" separator=",">
-            #{noList}
-        </foreach>
+        where  log_code=#{Code}
     </update>
 
 </mapper>

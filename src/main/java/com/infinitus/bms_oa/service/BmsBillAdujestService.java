@@ -30,9 +30,9 @@ public interface BmsBillAdujestService {
 
     String getCwkmName(String account_code);
 
-    List<BmsBillAdjust> getBillListDetail(List<String> adj_noArray);
+    List<BmsBillAdjust> getBillListDetail(String code);
 
-    boolean updateOA_flag(Integer oa_flag,List<String> noList);
+    boolean updateOA_flag(Integer oa_flag,String code);
 
-    boolean updateStatusAndApeDate(List<String> adj_noArray,Date approval_dt,String status);
+    boolean updateStatusAndApeDate(String Code,Date approval_dt,String status);
 }

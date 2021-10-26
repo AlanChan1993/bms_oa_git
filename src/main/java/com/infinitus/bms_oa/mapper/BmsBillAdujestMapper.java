@@ -43,17 +43,17 @@ public interface BmsBillAdujestMapper {
 
     String getCwkmName(String account_code);
 
-    List<BmsBillAdjust> getBillListDetail(List<String> adj_noArray);
+    List<BmsBillAdjust> getBillListDetail(String code);
 
-    boolean updateOaFlag_all(Integer oa_flag,List<String> noList);
+    boolean updateOaFlag_all(Integer oa_flag,String code);
 
-    boolean updateOaFlagEx_all(Integer oa_flag, List<String> noList);
+    boolean updateOaFlagEx_all(Integer oa_flag, String code);
 
-    boolean updateOaFlagExExempt_all(Integer oa_flag, List<String> noList);
+    boolean updateOaFlagExExempt_all(Integer oa_flag, String code);
 
-    boolean updateStatusAndApeDate(List<String> noList,Date approval_dt,String status);
+    boolean updateStatusAndApeDate(String Code,Date approval_dt,String status);
 
-    boolean updateExceptionStatusAndApeDate(List<String> noList,Date approval_dt,String status);
+    boolean updateExceptionStatusAndApeDate(String Code,Date approval_dt,String status);
 
-    boolean updateExceptionExemptStatusAndApeDate(List<String> noList,Date approval_dt,String status);
+    boolean updateExceptionExemptStatusAndApeDate(String Code,Date approval_dt,String status);
 }
