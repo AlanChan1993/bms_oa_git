@@ -189,6 +189,7 @@
         v.inactive_date>NOW() and v.delete_id is null
         and f.inactive_date>NOW() and f.delete_id is null
         and p.type_id='2c94c6cf45d05e0e0145d42ff62960f8'
+        and b.delete_id is null
         <if test="code!=null and code!=''">
             and b.log_code=#{code}
         </if>
@@ -206,6 +207,7 @@
         v.inactive_date>NOW() and v.delete_id is null
         and f.inactive_date>NOW() and f.delete_id is null
         and p.type_id='2c94c6cf469485f80146984bfa433afd'
+        and e.delete_id is null
         <if test="code!=null and code!=''">
             and e.log_code=#{code}
         </if>
@@ -223,6 +225,7 @@
         where
         p.type_id='2c94c6cf45d05e0e0145d430336f60f9'
         and v.inactive_date>NOW() and v.delete_id is null
+        and e.delete_id is null
         <if test="code!=null and code!=''">
             and e.log_code=#{code}
         </if>
@@ -233,6 +236,27 @@
     <update id="updateOaFlag_all" >
         update bms_bill_adjust set oa_flag=#{oa_flag}
          where log_code=#{code}
+    </update>
+
+    <update id="updateAdjLogCode" >
+        update bms_bill_adjust set log_code=#{code}
+         where create_id=#{create_id}
+         and delete_id is null
+         and (oa_flag='0' or oa_flag is null or oa_flag = null or oa_flag='')
+    </update>
+
+    <update id="updateExceptionLogCode" >
+        update bms_exception_adj set log_code=#{code}
+         where create_id=#{create_id}
+         and delete_id is null
+         and (oa_flag='0' or oa_flag is null or oa_flag = null or oa_flag='')
+    </update>
+
+    <update id="updateExemptLogCode" >
+        update bms_exempt set log_code=#{code}
+         where create_id=#{create_id}
+         and delete_id is null
+         and (oa_flag='0' or oa_flag is null or oa_flag = null or oa_flag='')
     </update>
 
     <update id="updateOaFlagEx_all" >

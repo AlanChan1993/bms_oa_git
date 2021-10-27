@@ -34,5 +34,7 @@ public interface BmsBillAdujestService {
 
     boolean updateOA_flag(Integer oa_flag,String code);
 
+    boolean updateLogCode(String code, String create_id);
+
     boolean updateStatusAndApeDate(String Code,Date approval_dt,String status);
 }

@@ -47,6 +47,11 @@ public interface BmsBillAdujestMapper {
 
     boolean updateOaFlag_all(Integer oa_flag,String code);
 
+    boolean updateAdjLogCode(String code, String create_id);
+    boolean updateExceptionLogCode(String code, String create_id);
+    boolean updateExemptLogCode(String code, String create_id);
+
+
     boolean updateOaFlagEx_all(Integer oa_flag, String code);
 
     boolean updateOaFlagExExempt_all(Integer oa_flag, String code);

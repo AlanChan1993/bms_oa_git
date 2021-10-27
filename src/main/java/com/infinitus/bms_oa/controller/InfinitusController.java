@@ -264,15 +264,10 @@ public class InfinitusController {
      */
     @RequestMapping("updateOaFlag")
     public void updateOaFlag(BillStatusDTO dto) {
-        Bms_OA_log bms_oa_log = new Bms_OA_log();
-        String bill_code="";
-        List<String> strings = new ArrayList<>();
         try {
             if (null == dto.getCode()||"".equals(dto.getCode())) return;
-            bms_oa_log = logService.getBmsOaLogByCode(dto.getCode());
-           /* bill_code = bms_oa_log.getBill_code();
-            strings = Arrays.asList(bill_code.split(","));*/
-            service.updateOA_flag(OaFlagEnum.NULL.getCode(), bms_oa_log.getCode());
+            service.updateOA_flag(OaFlagEnum.NULL.getCode(), dto.getCode());
+            service.updateLogCode(dto.getCode(), dto.getCreate_id());
             logService.updateOaFlag(OaFlagEnum.NULL.getCode(), dto.getCode());
             log.info("【updateOaFlag】，修改oa_flag执行SUCCESS");
         } catch (Exception ex) {

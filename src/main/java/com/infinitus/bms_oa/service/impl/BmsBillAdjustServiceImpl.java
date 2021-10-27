@@ -124,6 +124,11 @@ public class BmsBillAdjustServiceImpl implements BmsBillAdujestService {
     }
 
     @Override
+    public boolean updateLogCode(String code,String create_id) {
+        return bmsBillAdujestMapper.updateAdjLogCode(code, create_id);
+    }
+
+    @Override
     public boolean updateStatusAndApeDate(String Code, Date approval_dt, String status) {
         boolean b = false;
         try {

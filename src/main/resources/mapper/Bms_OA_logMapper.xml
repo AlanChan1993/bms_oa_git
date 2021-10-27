@@ -44,18 +44,21 @@
         <if test="create_id != null and create_id !=''">
             and create_id=#{create_id}
         </if>
+            and delete_id is null
          UNION ALL
         select exception_adj_no as adj_no from bms_exception_adj
         where (oa_flag='0' or oa_flag is null or oa_flag = null or oa_flag='')
         <if test="create_id != null and create_id !=''">
             and create_id=#{create_id}
         </if>
+        and delete_id is null
         UNION ALL
         select exempt_no as adj_no from bms_exempt
         where (oa_flag='0' or oa_flag is null or oa_flag = null or oa_flag='')
         <if test="create_id != null and create_id !=''">
             and create_id=#{create_id}
         </if>
+        and delete_id is null
     </select>
 
     <insert id="createBmsOaLog" parameterType="com.infinitus.bms_oa.pojo.Bms_OA_log">
