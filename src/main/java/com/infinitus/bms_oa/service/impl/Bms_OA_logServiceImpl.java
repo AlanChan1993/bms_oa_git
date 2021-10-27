@@ -27,6 +27,11 @@ public class Bms_OA_logServiceImpl implements Bms_OA_logService {
     }
 
     @Override
+    public boolean updateOaFlagAndSettleDate(Integer oa_flag, String code, String settleDate) {
+        return mapper.updateOaFlagAndSettleDate(oa_flag, code, settleDate);
+    }
+
+    @Override
     public boolean delBmsOALog(String code) {
         return mapper.delBmsOALog(code);
     }

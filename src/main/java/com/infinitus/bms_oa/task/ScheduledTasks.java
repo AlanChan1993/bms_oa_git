@@ -54,7 +54,7 @@ public class ScheduledTasks {
     /**
      * 每15s处理一次   1000 * 1 * 15
      */
-    @Scheduled(fixedRate = 1000 * 3 * 15)
+    @Scheduled(fixedRate = 1000 * 2 * 45)
     public void updateBillStatus() {
         String keyValue = simpleDateFormat.format(new Date());
         try {
@@ -142,7 +142,8 @@ public class ScheduledTasks {
             if (null != resultJson.get("success") && resultJson.get("success").equals(true)) {
                 log.info("【BmsSynOA修改已传oa_flag的值】,e.getCode():{}", e.getCode());
                 billService.updateOA_flag(OaFlagEnum.SUCCESS.getCode(), e.getCode());//提交成功则改变oa_flag的值0 标识未上传  2 已经上传  4上传失败
-                logService.updateOaFlag(OaFlagEnum.SUCCESS.getCode(), e.getCode());
+                //logService.updateOaFlag(OaFlagEnum.SUCCESS.getCode(), e.getCode());
+                logService.updateOaFlagAndSettleDate(OaFlagEnum.SUCCESS.getCode(), e.getCode(), table.getJsny().substring(0, 7));
                 log.info("【BmsSynOA修改已传oa_flag的值】", OaFlagEnum.SUCCESS.getMsg());
             } else {
                 log.info("【BmsSynOA修改传输失败的oa_flag的值】,e.getCode():{}", e.getCode());

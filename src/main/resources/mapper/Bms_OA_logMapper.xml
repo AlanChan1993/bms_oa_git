@@ -12,6 +12,7 @@
         <result column="creator" property="create_id" jdbcType="VARCHAR"></result>
         <result column="status" property="status" jdbcType="VARCHAR"></result>
         <result column="approval_dt" property="approval_dt" jdbcType="TIMESTAMP"></result>
+        <result column="settle_year_month" property="settle_year_month" jdbcType="VARCHAR"></result>
     </resultMap>
 
     <select id="getBmsOaLog" resultMap="BaseResultMap">
@@ -21,6 +22,11 @@
 
     <update id="updateOaFlag" >
         update bms_oa_log set oa_flag=#{oa_flag},syn_dt=now()
+         where code=#{code,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateOaFlagAndSettleDate" >
+        update bms_oa_log set oa_flag=#{oa_flag},syn_dt=now(),settle_year_month=#{settleDate}
          where code=#{code,jdbcType=VARCHAR}
     </update>
 

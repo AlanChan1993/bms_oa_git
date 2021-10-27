@@ -15,4 +15,5 @@ public class Bms_OA_log {
     private String create_id;//合并人
     private Date approval_dt;
     private String status;
+    private String settle_year_month;
 }

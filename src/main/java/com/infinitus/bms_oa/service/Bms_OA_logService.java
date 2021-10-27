@@ -10,6 +10,8 @@ public interface Bms_OA_logService {
 
     boolean updateOaFlag(Integer oa_flag,String code);
 
+    boolean updateOaFlagAndSettleDate(Integer oa_flag,String code,String settleDate);
+
     boolean delBmsOALog(String code);
 
     List<Bms_OA_log> selectBmsOaLogAll();
