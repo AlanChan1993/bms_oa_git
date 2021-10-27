@@ -89,7 +89,7 @@ public class ScheduledTasks {
             }
             infinitus.setWorkcode(loginName);//合并人 loginName
             infinitus.setWorkflowId("367");
-            infinitus.setRequestName(e.getCode());//主单号
+            infinitus.setRequestName("物流费用结算调整申请单："+e.getCode());//主单号
 
             InfinitusMainTable table = new InfinitusMainTable(); //MainTable 主表
             List<InfinitusDetailTables> detailTablesList = new ArrayList<>();//明细表，第一层
