@@ -150,7 +150,7 @@ public class ScheduledTasks {
     /**
      * 1.定时巡查bms_oa_log表，status=2，则为已经同步并审批的记录
      * 2.将此条记录中的两张流程表中的记录的审批状态status=20，审批时间修改
-     * 3.bms_oa_log 审批状态，2：已审批，需改流程表状态；4：已改
+     * 3.bms_oa_log 审批状态，2：已审批，需改流程表状态；6：已改
      */
     public void scheduledBmsOaLog() {
         try {
