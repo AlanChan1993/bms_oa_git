@@ -10,6 +10,7 @@ import com.infinitus.bms_oa.service.BmsBillAdujestService;
 import com.infinitus.bms_oa.service.Bms_OA_logService;
 import com.infinitus.bms_oa.utils.DateUtil;
 import com.infinitus.bms_oa.utils.Httputil;
+import com.infinitus.bms_oa.utils.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -63,7 +64,7 @@ public class InfinitusController {
      * 3.打包数据提交接口
      * 4.接收返回实例
      */
-    @PostMapping("/hello")
+    //@PostMapping("/hello")
     public String BmsToOA() {
         //1.设置url，后面改成配置在yml中
         //String url = "https://oa-test.infinitus-int.com/api/infinitusint/public/workflow/doCreateWorkflowRequest";
@@ -186,7 +187,6 @@ public class InfinitusController {
     @RequestMapping("updateBillStatus")
     public ResultVO updateBillStatus(@RequestBody BillStatusDTO statusDTO) throws ParseException {
         ResultVO resultVO = new ResultVO();
-
         Date date = null;
         if (null != statusDTO.getApproval_dt() && !"".equals(statusDTO.getApproval_dt())) {
             date = simpleDateFormat.parse(statusDTO.getApproval_dt());
@@ -232,10 +232,12 @@ public class InfinitusController {
      */
     @RequestMapping("getBillByCreator")
     public String getBillByCreator(String create_id) {
+        log.info("【getBillByCreator】合并的流程单，start················");
         String result="";
         try {
             //1、取adj_no
             List<String> adjList = logService.getBmsOaLogByCreateId(create_id);
+            log.info("【getBillByCreator】需要合并的流程单，adjList:{}",adjList);
             if (null == adjList || adjList.size() < 1)  return ResultEnum.NODATA.getMsg();
             //2.处理adj_no
             /*StringBuffer nos = new StringBuffer();
@@ -243,7 +245,7 @@ public class InfinitusController {
                 nos.append(e).append(",");
             });*/
             //3.生成主单号,创建bms_oa_log
-            String code = "BMS-" + new DateUtil().getNowDate();
+            String code = "BMS-" + new StringUtil().getNowDate_yyyyMMddHHmmss();
             logService.createBmsOaLog(code, "", create_id);
             //4.update 主单号到流程表的 log_code字段
             logService.updateBillLogCode(code, adjList);
@@ -260,10 +262,10 @@ public class InfinitusController {
      * 重置按钮接口
      * 1.去除bill_code将其oa_flag改为0（表示需要重新同步）
      * 2.将OA_flag改为8（oa已删除，bms已重置）需求变更为 重新同步 无需重置后再生成一条
-     *
      */
     @RequestMapping("updateOaFlag")
     public void updateOaFlag(BillStatusDTO dto) {
+        log.info("【updateOaFlag】重新合并流程单，start················");
         try {
             if (null == dto.getCode()||"".equals(dto.getCode())) return;
             service.updateOA_flag(OaFlagEnum.NULL.getCode(), dto.getCode());
