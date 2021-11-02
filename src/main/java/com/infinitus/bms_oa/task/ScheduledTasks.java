@@ -88,7 +88,7 @@ public class ScheduledTasks {
                 loginName = billService.selectLoginNameById(e.getCreate_id());
             }
             infinitus.setWorkcode(loginName);//合并人 loginName
-            infinitus.setWorkflowId("367");
+            infinitus.setWorkflowId("249");//OA生产使用249，OA测试使用367
             infinitus.setRequestName("物流费用结算调整申请单："+e.getCode());//主单号
 
             InfinitusMainTable table = new InfinitusMainTable(); //MainTable 主表
@@ -106,6 +106,7 @@ public class ScheduledTasks {
 
             //2.用单号查找对应流程表详细数据
             List<BmsBillAdjust> adjustList = billService.getBillListDetail(e.getCode());
+            if (null == adjustList && adjustList.size() < 1) return;
             //3.打包数据提交接口:
             for (int i = 0; i < adjustList.size(); i++) {
                 if (null == adjustList.get(i).getSettle_year_month() || "".equals(adjustList.get(i).getSettle_year_month())) {
@@ -122,6 +123,9 @@ public class ScheduledTasks {
             }
             table.setZje(d);
             table.setDh(e.getCode());
+            if (null == table.getJsny() || "".equals(table.getJsny())) {
+                table.setJsny(simpleDateFormat2.format(new Date()));
+            }
             infinitus.setMainTable(table);
             infinitusDetailTables.setRows(infinitusDetailTablesRowList);
             detailTablesList.add(infinitusDetailTables);
@@ -135,6 +139,8 @@ public class ScheduledTasks {
             if (null != resultJson.get("success") && resultJson.get("success").equals(true)) {
                 log.info("【BmsSynOA修改已传oa_flag的值】,e.getCode():{}", e.getCode());
                 billService.updateOA_flag(OaFlagEnum.SUCCESS.getCode(), e.getCode());//提交成功则改变oa_flag的值0 标识未上传  2 已经上传  4上传失败
+                log.info("【e.getCode()】，e.getCode()：{}",e.getCode());
+                log.info("【 table.getJsny().substring(0, 7)】， table.getJsny().substring(0, 7)：{}", table.getJsny().substring(0, 7));
                 logService.updateOaFlagAndSettleDate(OaFlagEnum.SUCCESS.getCode(), e.getCode(), table.getJsny().substring(0, 7));
                 log.info("【BmsSynOA修改已传oa_flag的值】", OaFlagEnum.SUCCESS.getMsg());
             } else {

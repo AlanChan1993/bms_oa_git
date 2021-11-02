@@ -14,7 +14,6 @@ public class Httputil {
     private static final int SUCCESS_STATUS = 200;
 
     public static JSONObject doPostJson(String url, String json, String token) {
-
         CloseableHttpClient client = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(url);
         JSONObject response = null;
@@ -31,14 +30,13 @@ public class Httputil {
             } else {
                 String result = EntityUtils.toString(res.getEntity());
                 response = JSONObject.parseObject(result);
-                System.out.println("返回异常结果：" + response.toString());
+                log.error("【doPostJson】返回异常结果,response:{}", response.toString());
                 return response;
             }
         } catch (Exception e) {
-            log.error("异常：" + e);
+            log.error("【doPostJson】异常,e:{}", e);
         }
         return response;
-
     }
 
 }
