@@ -47,7 +47,7 @@ public class ScheduledTasks {
             String statusFlag = BmsSynOA();
             log.info("【定时任务bmsToOA()处理结束】:statusFlag:{}", statusFlag);
         } catch (Exception ex) {
-            log.info("【ScheduledTasks】执行错误:ex:{}", ex);
+            log.info("【bmsToOA】执行错误:ex:{}", ex);
         }
     }
 
@@ -109,10 +109,11 @@ public class ScheduledTasks {
             if (null == adjustList && adjustList.size() < 1) return;
             //3.打包数据提交接口:
             for (int i = 0; i < adjustList.size(); i++) {
-                if (null == adjustList.get(i).getSettle_year_month() || "".equals(adjustList.get(i).getSettle_year_month())) {
-                    adjustList.get(i).setSettle_year_month(new Date());
+                Date jsnyDate = new Date();
+                if (null != adjustList.get(i).getSettle_year_month() || !"".equals(adjustList.get(i).getSettle_year_month())) {
+                    jsnyDate = adjustList.get(i).getSettle_year_month();
                 }
-                table.setJsny(simpleDateFormat2.format(adjustList.get(i).getSettle_year_month()));//需求指出每个结算年月一致，就随机取最后一个为准
+                table.setJsny(simpleDateFormat2.format(jsnyDate));//需求指出每个结算年月一致，就随机取最后一个为准
                 //封装每行明细的数据
                 InfinitusDetailTablesRow infinitusDetailTablesRow
                         = new InfinitusUtil().setInfinitusDetailTablesRow(adjustList.get(i));
@@ -137,20 +138,19 @@ public class ScheduledTasks {
             JSONObject resultJson = Httputil.doPostJson(url,jsonObject,"");
             log.info("【提交接口返回数据resultJson】----:resultJson:{}", resultJson);
             if (null != resultJson.get("success") && resultJson.get("success").equals(true)) {
-                log.info("【BmsSynOA修改已传oa_flag的值】,e.getCode():{}", e.getCode());
+                //log.info("【BmsSynOA修改已传oa_flag的值】,e.getCode():{}", e.getCode());
                 billService.updateOA_flag(OaFlagEnum.SUCCESS.getCode(), e.getCode());//提交成功则改变oa_flag的值0 标识未上传  2 已经上传  4上传失败
-                log.info("【e.getCode()】，e.getCode()：{}",e.getCode());
-                log.info("【 table.getJsny().substring(0, 7)】， table.getJsny().substring(0, 7)：{}", table.getJsny().substring(0, 7));
+                //log.info("【 table.getJsny().substring(0, 7)】， table.getJsny().substring(0, 7)：{}", table.getJsny().substring(0, 7));
                 logService.updateOaFlagAndSettleDate(OaFlagEnum.SUCCESS.getCode(), e.getCode(), table.getJsny().substring(0, 7));
                 log.info("【BmsSynOA修改已传oa_flag的值】", OaFlagEnum.SUCCESS.getMsg());
             } else {
-                log.info("【BmsSynOA修改传输失败的oa_flag的值】,e.getCode():{}", e.getCode());
+                //log.info("【BmsSynOA修改传输失败的oa_flag的值】,e.getCode():{}", e.getCode());
                 billService.updateOA_flag(OaFlagEnum.FALSE.getCode(), e.getCode());
                 logService.updateOaFlag(OaFlagEnum.FALSE.getCode(), e.getCode());
                 log.info("【BmsSynOA修改传输失败的oa_flag的值】", OaFlagEnum.FALSE.getMsg());
             }
         });
-        return "ok";
+        return "SUCCESS";
     }
 
     /**
