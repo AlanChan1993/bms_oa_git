@@ -190,7 +190,7 @@
         and f.inactive_date>NOW() and f.delete_id is null
         and p.type_id='2c94c6cf45d05e0e0145d42ff62960f8'
         and b.delete_id is null
-        and b.settle_status &lt; '40' and b.settle_year_month is null
+        and b.settle_status &lt; '40'
         <if test="code!=null and code!=''">
             and b.log_code=#{code}
         </if>
@@ -209,7 +209,7 @@
         and f.inactive_date>NOW() and f.delete_id is null
         and p.type_id='2c94c6cf469485f80146984bfa433afd'
         and e.delete_id is null
-        and e.settle_status &lt; '40' and e.adj_year_month is null
+        and e.settle_status &lt; '40'
         <if test="code!=null and code!=''">
             and e.log_code=#{code}
         </if>
