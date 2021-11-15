@@ -38,6 +38,7 @@ public class ScheduledTasks {
 
     /**
      * 每30s处理一次   1000 * 1 * 30
+     * 执行定时任务，用于将bms_oa_log中所需同步数据封装同步
      */
     @Scheduled(fixedRate = 1000 * 2 * 30)
     public void bmsToOA() {
@@ -53,6 +54,7 @@ public class ScheduledTasks {
 
     /**
      * 每15s处理一次   1000 * 1 * 15
+     * 执行定时任务，将bms_oa_log中已经回转状态的数据进行更改审批状态： status
      */
     @Scheduled(fixedRate = 1000 * 2 * 45)
     public void updateBillStatus() {
