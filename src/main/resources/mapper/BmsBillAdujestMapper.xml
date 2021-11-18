@@ -184,7 +184,7 @@
         left join bms_vendor v on b.vendor_no=v.vendor_code
         left join bms_finance_account f on b.finance_account_no=f.account_code
         left join plat_code p on b.adj_reason=p.code
-        left join plat_login_user u on b.create_id=u.id
+        left join plat_login_user u on b.submit_id=u.id
         where
         v.inactive_date>NOW() and v.delete_id is null
         and f.inactive_date>NOW() and f.delete_id is null
@@ -203,7 +203,7 @@
         left join bms_vendor v on e.vendor_no=v.vendor_code
         left join bms_finance_account f on e.account_no=f.account_code
         left join plat_code p on e.adj_reason=p.code
-        left join plat_login_user u on e.create_id=u.id
+        left join plat_login_user u on e.submit_id=u.id
         where
         v.inactive_date>NOW() and v.delete_id is null
         and f.inactive_date>NOW() and f.delete_id is null
@@ -222,7 +222,7 @@
         left join  bms_warehouse w on b.billto_wh_code=w.wh_code
         left join bms_vendor v on b.vendor_code=v.vendor_code
         left join plat_code p on e.exempt_reason=p.code
-        left join plat_login_user u on e.create_id=u.id
+        left join plat_login_user u on e.submit_id=u.id
         left join bms_finance_account f on b.account_id=f.id
         where
         p.type_id='2c94c6cf45d05e0e0145d430336f60f9'

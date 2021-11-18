@@ -86,9 +86,11 @@ public class ScheduledTasks {
         logList.stream().forEach(e->{
             Infinitus infinitus = new Infinitus();//Infinitus|-|Json第一层
             String loginName = "";
+            log.info("【BmsSynOA()】·········begin··········");
             if (null != e.getCreate_id()&&!"".equals(e.getCreate_id())) {
                 loginName = billService.selectLoginNameById(e.getCreate_id());
             }
+            log.info("【BmsSynOA()】，loginName:{}", loginName);
             infinitus.setWorkcode(loginName);//合并人 loginName
             infinitus.setWorkflowId("249");//OA生产使用249，OA测试使用367
             infinitus.setRequestName("物流费用结算调整申请单："+e.getCode());//主单号
@@ -106,19 +108,54 @@ public class ScheduledTasks {
 
             Double d = new Double(0);//用于计算总金额
 
+
             //2.用单号查找对应流程表详细数据
             List<BmsBillAdjust> adjustList = billService.getBillListDetail(e.getCode());
+            log.info("【BmsSynOA().adjustList】,adjustList:{}", adjustList);
             if (null == adjustList && adjustList.size() < 1) return;
             //3.打包数据提交接口:
             for (int i = 0; i < adjustList.size(); i++) {
                 Date jsnyDate = new Date();
-                if (null != adjustList.get(i).getSettle_year_month() || !"".equals(adjustList.get(i).getSettle_year_month())) {
+                log.info("【BmsSynOA().jsnyDate】,jsnyDate:{}", jsnyDate);
+                //log.info("【BmsSynOA().adjustList】,adjustList.get(i).getSettle_year_month():{}", adjustList.get(i).getSettle_year_month());
+                if (null!=adjustList.get(i).getSettle_year_month() && !"".equals(adjustList.get(i).getSettle_year_month())) {
                     jsnyDate = adjustList.get(i).getSettle_year_month();
+                    log.info("【BmsSynOA().jsnyDate1】,jsnyDate:{}", jsnyDate);
                 }
+                log.info("【BmsSynOA().jsnyDate2】,jsnyDate:{}", jsnyDate);
                 table.setJsny(simpleDateFormat2.format(jsnyDate));//需求指出每个结算年月一致，就随机取最后一个为准
-                //封装每行明细的数据
+                /*//封装每行明细的数据
                 InfinitusDetailTablesRow infinitusDetailTablesRow
-                        = new InfinitusUtil().setInfinitusDetailTablesRow(adjustList.get(i));
+                        = new InfinitusUtil().setInfinitusDetailTablesRow(adjustList.get(i));*/
+                InfinitusDetailTablesRow infinitusDetailTablesRow = new InfinitusDetailTablesRow();
+                infinitusDetailTablesRow.setSqr(adjustList.get(i).getCreate_id());
+                infinitusDetailTablesRow.setDh(adjustList.get(i).getAdj_no());
+                infinitusDetailTablesRow.setSqtjrq(simpleDateFormat.format(adjustList.get(i).getAdj_dt()));//申请提交日期
+                infinitusDetailTablesRow.setJsny(simpleDateFormat.format(jsnyDate));
+                infinitusDetailTablesRow.setJsc(adjustList.get(i).getSettle_wh_code());
+                infinitusDetailTablesRow.setGys(adjustList.get(i).getVendor_no());
+                infinitusDetailTablesRow.setCwkm(adjustList.get(i).getFinance_account_no());
+                infinitusDetailTablesRow.setDzje(adjustList.get(i).getAdj_amount());
+                String tznr=adjustList.get(i).getAdj_type();
+                if ("01".equals(tznr)&&adjustList.get(i).getAdj_no().indexOf("IA-")>=0) {
+                    tznr = "运费费用调整";
+                } else if("02".equals(tznr)&&adjustList.get(i).getAdj_no().indexOf("IA-")>=0){
+                    tznr = "仓储费用调整";
+                }else if("01".equals(tznr)&&adjustList.get(i).getAdj_no().indexOf("TZ-")>=0){
+                    tznr = "运输扣款调整";
+                }else if("02".equals(tznr)&&adjustList.get(i).getAdj_no().indexOf("TZ-")>=0){
+                    tznr = "仓储扣款调整";
+                }else if("01".equals(tznr)&&(null==adjustList.get(i).getAdj_no()||"".equals(adjustList.get(i).getAdj_no()))){
+                    tznr = "运输异常调整";
+                }else if("02".equals(tznr)&&(null==adjustList.get(i).getAdj_no()||"".equals(adjustList.get(i).getAdj_no()))){
+                    tznr = "仓储异常调整";
+                }
+
+                infinitusDetailTablesRow.setDznr(tznr);
+                infinitusDetailTablesRow.setDzyy(adjustList.get(i).getAdj_reason());
+                infinitusDetailTablesRow.setDzyysm(adjustList.get(i).getComments());
+                infinitusDetailTablesRow.setHzdm(adjustList.get(i).getOwner_key());
+                infinitusDetailTablesRow.setHzmc(adjustList.get(i).getOwner_name());
 
                 //回收infinitusDetailTablesRow==>>infinitusDetailTablesRowList
                 infinitusDetailTablesRowList.add(infinitusDetailTablesRow);
@@ -126,6 +163,7 @@ public class ScheduledTasks {
             }
             table.setZje(d);
             table.setDh(e.getCode());
+            log.info("【BmsSynOA().table.getJsny()】,table.getJsny():{}", table.getJsny());
             if (null == table.getJsny() || "".equals(table.getJsny())) {
                 table.setJsny(simpleDateFormat2.format(new Date()));
             }
@@ -140,13 +178,13 @@ public class ScheduledTasks {
             JSONObject resultJson = Httputil.doPostJson(url,jsonObject,"");
             log.info("【提交接口返回数据resultJson】----:resultJson:{}", resultJson);
             if (null != resultJson.get("success") && resultJson.get("success").equals(true)) {
-                //log.info("【BmsSynOA修改已传oa_flag的值】,e.getCode():{}", e.getCode());
+                log.info("【BmsSynOA修改已传oa_flag的值】,e.getCode():{}", e.getCode());
                 billService.updateOA_flag(OaFlagEnum.SUCCESS.getCode(), e.getCode());//提交成功则改变oa_flag的值0 标识未上传  2 已经上传  4上传失败
-                //log.info("【 table.getJsny().substring(0, 7)】， table.getJsny().substring(0, 7)：{}", table.getJsny().substring(0, 7));
+                log.info("【 table.getJsny().substring(0, 7)】， table.getJsny().substring(0, 7)：{}", table.getJsny().substring(0, 7));
                 logService.updateOaFlagAndSettleDate(OaFlagEnum.SUCCESS.getCode(), e.getCode(), table.getJsny().substring(0, 7));
                 log.info("【BmsSynOA修改已传oa_flag的值】", OaFlagEnum.SUCCESS.getMsg());
             } else {
-                //log.info("【BmsSynOA修改传输失败的oa_flag的值】,e.getCode():{}", e.getCode());
+                log.info("【BmsSynOA修改传输失败的oa_flag的值】,e.getCode():{}", e.getCode());
                 billService.updateOA_flag(OaFlagEnum.FALSE.getCode(), e.getCode());
                 logService.updateOaFlag(OaFlagEnum.FALSE.getCode(), e.getCode());
                 log.info("【BmsSynOA修改传输失败的oa_flag的值】", OaFlagEnum.FALSE.getMsg());
