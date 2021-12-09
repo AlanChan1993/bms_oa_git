@@ -87,7 +87,7 @@ public class ScheduledTasks {
             Infinitus infinitus = new Infinitus();//Infinitus|-|Json第一层
             String loginName = "";
             log.info("【BmsSynOA()】·········begin··········");
-            if (null != e.getCreate_id()&&!"".equals(e.getCreate_id())) {
+            if (null != e.getCreate_id() && !"".equals(e.getCreate_id())) {
                 loginName = billService.selectLoginNameById(e.getCreate_id());
             }
             log.info("【BmsSynOA()】，loginName:{}", loginName);
@@ -157,9 +157,15 @@ public class ScheduledTasks {
                 infinitusDetailTablesRow.setHzdm(adjustList.get(i).getOwner_key());
                 infinitusDetailTablesRow.setHzmc(adjustList.get(i).getOwner_name());
 
+                Double superJe = 0d;
                 //回收infinitusDetailTablesRow==>>infinitusDetailTablesRowList
                 infinitusDetailTablesRowList.add(infinitusDetailTablesRow);
-                d += adjustList.get(i).getAdj_amount();
+                if (adjustList.get(i).getAdj_amount() != null && adjustList.get(i).getAdj_amount() > 0) {
+                    superJe = adjustList.get(i).getAdj_amount();
+                } else if (adjustList.get(i).getAdj_amount() < 0) {
+                    superJe = -1 * adjustList.get(i).getAdj_amount();
+                }
+                d += superJe;
             }
             table.setZje(d);
             table.setDh(e.getCode());
