@@ -236,6 +236,18 @@
         order by settle_year_month
     </select>
 
+    <select id="getBillListDetailView" resultMap="BaseResultMap_InfinitusBill">
+         SELECT * FROM V_BMS_ADJUST_COMBINE_DETAIL B
+         WHERE
+        <if test="code!=null and code!=''">
+            B.LOG_CODE=#{code}
+        </if>
+        <if test="submit_id!=null and submit_id!=''">
+            AND B.SUBMIT_ID=#{submit_id}
+        </if>
+
+    </select>
+
     <update id="updateOaFlag_all" >
         update bms_bill_adjust set oa_flag=#{oa_flag}
          where log_code=#{code}

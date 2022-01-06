@@ -14,6 +14,8 @@ public interface BmsBillAdujestService {
 
     List<BmsBillAdjust> selectBillByBillFlag();
 
+
+
     boolean updateOA_flag(String oa_flag,String id,String no);
 
     boolean updateStatusAndDate( String adj_no, Date approval_dt);
@@ -31,6 +33,8 @@ public interface BmsBillAdujestService {
     String getCwkmName(String account_code);
 
     List<BmsBillAdjust> getBillListDetail(String code);
+
+    List<BmsBillAdjust> getBillListDetailView(String code,String submit_id);
 
     boolean updateOA_flag(Integer oa_flag,String code);
 

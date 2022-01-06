@@ -110,6 +110,11 @@ public class BmsBillAdjustServiceImpl implements BmsBillAdujestService {
     }
 
     @Override
+    public List<BmsBillAdjust> getBillListDetailView(String code, String submit_id) {
+        return bmsBillAdujestMapper.getBillListDetailView(code,submit_id);
+    }
+
+    @Override
     public boolean updateOA_flag(Integer oa_flag,String code) {
         boolean b = false;
         try {

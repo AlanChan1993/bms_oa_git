@@ -110,10 +110,11 @@ public class ScheduledTasks {
 
 
             //2.用单号查找对应流程表详细数据
-            List<BmsBillAdjust> adjustList = billService.getBillListDetail(e.getCode());
+            List<BmsBillAdjust> adjustList = billService.getBillListDetailView(e.getCode(),e.getCreate_id());
             log.info("【BmsSynOA().adjustList】,adjustList:{}", adjustList);
             if (null == adjustList && adjustList.size() < 1) return;
             //3.打包数据提交接口:
+            Date jsnyDateTable = null;
             for (int i = 0; i < adjustList.size(); i++) {
                 Date jsnyDate = new Date();
                 log.info("【BmsSynOA().jsnyDate】,jsnyDate:{}", jsnyDate);
@@ -121,6 +122,9 @@ public class ScheduledTasks {
                 if (null!=adjustList.get(i).getSettle_year_month() && !"".equals(adjustList.get(i).getSettle_year_month())) {
                     jsnyDate = adjustList.get(i).getSettle_year_month();
                     log.info("【BmsSynOA().jsnyDate1】,jsnyDate:{}", jsnyDate);
+                    if (jsnyDateTable == null || adjustList.get(i).getSettle_year_month().getTime() > jsnyDateTable.getTime()) {
+                        jsnyDateTable = adjustList.get(i).getSettle_year_month();
+                    }
                 }
                 log.info("【BmsSynOA().jsnyDate2】,jsnyDate:{}", jsnyDate);
                 table.setJsny(simpleDateFormat2.format(jsnyDate));//需求指出每个结算年月一致，就随机取最后一个为准
@@ -157,15 +161,9 @@ public class ScheduledTasks {
                 infinitusDetailTablesRow.setHzdm(adjustList.get(i).getOwner_key());
                 infinitusDetailTablesRow.setHzmc(adjustList.get(i).getOwner_name());
 
-                Double superJe = 0d;
                 //回收infinitusDetailTablesRow==>>infinitusDetailTablesRowList
                 infinitusDetailTablesRowList.add(infinitusDetailTablesRow);
-                if (adjustList.get(i).getAdj_amount() != null && adjustList.get(i).getAdj_amount() > 0) {
-                    superJe = adjustList.get(i).getAdj_amount();
-                } else if (adjustList.get(i).getAdj_amount() < 0) {
-                    superJe = -1 * adjustList.get(i).getAdj_amount();
-                }
-                d += superJe;
+                d += Math.abs(adjustList.get(i).getAdj_amount());
             }
             table.setZje(d);
             table.setDh(e.getCode());
