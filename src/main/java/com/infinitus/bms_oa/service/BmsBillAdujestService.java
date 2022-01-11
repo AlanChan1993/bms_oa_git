@@ -36,6 +36,8 @@ public interface BmsBillAdujestService {
 
     List<BmsBillAdjust> getBillListDetailView(String code,String submit_id);
 
+    String getBillListDetail_JSNY(String code,String submit_id);
+
     boolean updateOA_flag(Integer oa_flag,String code);
 
     boolean updateLogCode(String code, String create_id);

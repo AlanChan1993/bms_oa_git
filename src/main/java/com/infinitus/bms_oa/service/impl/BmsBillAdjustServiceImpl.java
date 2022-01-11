@@ -115,6 +115,11 @@ public class BmsBillAdjustServiceImpl implements BmsBillAdujestService {
     }
 
     @Override
+    public String getBillListDetail_JSNY(String code, String submit_id) {
+        return bmsBillAdujestMapper.getBillListDetail_JSNY(code,submit_id);
+    }
+
+    @Override
     public boolean updateOA_flag(Integer oa_flag,String code) {
         boolean b = false;
         try {

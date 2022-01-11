@@ -47,6 +47,8 @@ public interface BmsBillAdujestMapper {
 
     List<BmsBillAdjust> getBillListDetailView(String code,String submit_id);
 
+    String getBillListDetail_JSNY(String code,String submit_id);
+
     boolean updateOaFlag_all(Integer oa_flag,String code);
 
     boolean updateAdjLogCode(String code, String create_id);

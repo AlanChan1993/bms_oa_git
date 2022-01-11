@@ -92,7 +92,7 @@ public class ScheduledTasks {
             }
             log.info("【BmsSynOA()】，loginName:{}", loginName);
             infinitus.setWorkcode(loginName);//合并人 loginName
-            infinitus.setWorkflowId("249");//OA生产使用249，OA测试使用367
+            infinitus.setWorkflowId("367");//OA生产使用249，OA测试使用367
             infinitus.setRequestName("物流费用结算调整申请单："+e.getCode());//主单号
 
             InfinitusMainTable table = new InfinitusMainTable(); //MainTable 主表
@@ -185,7 +185,11 @@ public class ScheduledTasks {
                 log.info("【BmsSynOA修改已传oa_flag的值】,e.getCode():{}", e.getCode());
                 billService.updateOA_flag(OaFlagEnum.SUCCESS.getCode(), e.getCode());//提交成功则改变oa_flag的值0 标识未上传  2 已经上传  4上传失败
                 log.info("【 table.getJsny().substring(0, 7)】， table.getJsny().substring(0, 7)：{}", table.getJsny().substring(0, 7));
-                logService.updateOaFlagAndSettleDate(OaFlagEnum.SUCCESS.getCode(), e.getCode(), table.getJsny().substring(0, 7));
+                String jsny = billService.getBillListDetail_JSNY(e.getCode(), e.getCreate_id());
+                if (null == jsny || "".equals(jsny)) {
+                    jsny=simpleDateFormat2.format(new Date());
+                }
+                logService.updateOaFlagAndSettleDate(OaFlagEnum.SUCCESS.getCode(), e.getCode(), jsny.substring(0, 7));
                 log.info("【BmsSynOA修改已传oa_flag的值】", OaFlagEnum.SUCCESS.getMsg());
             } else {
                 log.info("【BmsSynOA修改传输失败的oa_flag的值】,e.getCode():{}", e.getCode());

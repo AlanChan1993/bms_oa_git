@@ -37,9 +37,9 @@ logging:
 BMS:
   URL:
     #OA测试地址-发起流程
-#    billToOA: https://oa-test.infinitus-int.com/api/infinitusint/public/workflow/doCreateWorkflowRequest
+    billToOA: https://oa-test.infinitus-int.com/api/infinitusint/public/workflow/doCreateWorkflowRequest
     #OA生产地址-发起流程
-    billToOA: https://oa.infinitus-int.com/api/infinitusint/public/workflow/doCreateWorkflowRequest
+#    billToOA: https://oa.infinitus-int.com/api/infinitusint/public/workflow/doCreateWorkflowRequest
 
 
 
