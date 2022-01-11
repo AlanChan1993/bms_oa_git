@@ -248,7 +248,7 @@
 
     </select>
 
-    <select id="getBillListDetail_JSNY" >
+    <select id="getBillListDetail_JSNY" resultType="java.lang.String">
         SELECT MAX(SETTLE_YEAR_MONTH)
         FROM V_BMS_ADJUST_COMBINE_DETAIL B
         WHERE

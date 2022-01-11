@@ -186,6 +186,7 @@ public class ScheduledTasks {
                 billService.updateOA_flag(OaFlagEnum.SUCCESS.getCode(), e.getCode());//提交成功则改变oa_flag的值0 标识未上传  2 已经上传  4上传失败
                 log.info("【 table.getJsny().substring(0, 7)】， table.getJsny().substring(0, 7)：{}", table.getJsny().substring(0, 7));
                 String jsny = billService.getBillListDetail_JSNY(e.getCode(), e.getCreate_id());
+                //String jsny_end="0";
                 if (null == jsny || "".equals(jsny)) {
                     jsny=simpleDateFormat2.format(new Date());
                 }
