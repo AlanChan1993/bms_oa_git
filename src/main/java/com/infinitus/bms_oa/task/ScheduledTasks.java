@@ -92,7 +92,7 @@ public class ScheduledTasks {
             }
             log.info("【BmsSynOA()】，loginName:{}", loginName);
             infinitus.setWorkcode(loginName);//合并人 loginName
-            infinitus.setWorkflowId("367");//OA生产使用249，OA测试使用367
+            infinitus.setWorkflowId("249");//OA生产使用249，OA测试使用367
             infinitus.setRequestName("物流费用结算调整申请单："+e.getCode());//主单号
 
             InfinitusMainTable table = new InfinitusMainTable(); //MainTable 主表
@@ -127,7 +127,7 @@ public class ScheduledTasks {
                     }
                 }
                 log.info("【BmsSynOA().jsnyDate2】,jsnyDate:{}", jsnyDate);
-                table.setJsny(simpleDateFormat2.format(jsnyDate));//需求指出每个结算年月一致，就随机取最后一个为准
+                //table.setJsny(simpleDateFormat2.format(jsnyDate));//需求指出每个结算年月一致，就随机取最后一个为准
                 /*//封装每行明细的数据
                 InfinitusDetailTablesRow infinitusDetailTablesRow
                         = new InfinitusUtil().setInfinitusDetailTablesRow(adjustList.get(i));*/
@@ -167,6 +167,7 @@ public class ScheduledTasks {
             }
             table.setZje(d);
             table.setDh(e.getCode());
+            table.setJsny(simpleDateFormat2.format(jsnyDateTable));
             log.info("【BmsSynOA().table.getJsny()】,table.getJsny():{}", table.getJsny());
             if (null == table.getJsny() || "".equals(table.getJsny())) {
                 table.setJsny(simpleDateFormat2.format(new Date()));
