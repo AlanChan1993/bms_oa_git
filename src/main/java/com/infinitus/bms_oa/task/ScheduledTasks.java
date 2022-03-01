@@ -116,6 +116,7 @@ public class ScheduledTasks {
             //3.打包数据提交接口:
             Date jsnyDateTable = null;
             for (int i = 0; i < adjustList.size(); i++) {
+                log.info("----------------------------------------------adjustList.size():{}",adjustList.size());
                 Date jsnyDate = new Date();
                 log.info("【BmsSynOA().jsnyDate】,jsnyDate:{}", jsnyDate);
                 //log.info("【BmsSynOA().adjustList】,adjustList.get(i).getSettle_year_month():{}", adjustList.get(i).getSettle_year_month());
@@ -135,7 +136,9 @@ public class ScheduledTasks {
                 infinitusDetailTablesRow.setSqr(adjustList.get(i).getCreate_id());
                 infinitusDetailTablesRow.setDh(adjustList.get(i).getAdj_no());
                 infinitusDetailTablesRow.setSqtjrq(simpleDateFormat.format(adjustList.get(i).getAdj_dt()));//申请提交日期
-                infinitusDetailTablesRow.setJsny(simpleDateFormat.format(jsnyDate));
+                if (null != jsnyDate && !"".equals(jsnyDate)) {
+                    infinitusDetailTablesRow.setJsny(simpleDateFormat.format(jsnyDate));
+                }
                 infinitusDetailTablesRow.setJsc(adjustList.get(i).getSettle_wh_code());
                 infinitusDetailTablesRow.setGys(adjustList.get(i).getVendor_no());
                 infinitusDetailTablesRow.setCwkm(adjustList.get(i).getFinance_account_no());
@@ -167,6 +170,10 @@ public class ScheduledTasks {
             }
             table.setZje(d);
             table.setDh(e.getCode());
+            if (null == jsnyDateTable || "".equals(jsnyDateTable)) {
+                jsnyDateTable = new Date();
+            }
+            log.info("-------------------------------table.setJsny=", simpleDateFormat2.format(jsnyDateTable));
             table.setJsny(simpleDateFormat2.format(jsnyDateTable));
             log.info("【BmsSynOA().table.getJsny()】,table.getJsny():{}", table.getJsny());
             if (null == table.getJsny() || "".equals(table.getJsny())) {
