@@ -108,7 +108,6 @@ public class ScheduledTasks {
 
             Double d = new Double(0);//用于计算总金额
 
-
             //2.用单号查找对应流程表详细数据
             List<BmsBillAdjust> adjustList = billService.getBillListDetailView(e.getCode(),e.getCreate_id());
             log.info("【BmsSynOA().adjustList】,adjustList:{}", adjustList);
@@ -116,7 +115,7 @@ public class ScheduledTasks {
             //3.打包数据提交接口:
             Date jsnyDateTable = null;
             for (int i = 0; i < adjustList.size(); i++) {
-                log.info("----------------------------------------------adjustList.size():{}",adjustList.size());
+                //log.info("----------------------------------------------adjustList.size():{}",adjustList.size());
                 Date jsnyDate = new Date();
                 log.info("【BmsSynOA().jsnyDate】,jsnyDate:{}", jsnyDate);
                 //log.info("【BmsSynOA().adjustList】,adjustList.get(i).getSettle_year_month():{}", adjustList.get(i).getSettle_year_month());
@@ -127,7 +126,7 @@ public class ScheduledTasks {
                         jsnyDateTable = adjustList.get(i).getSettle_year_month();
                     }
                 }
-                log.info("【BmsSynOA().jsnyDate2】,jsnyDate:{}", jsnyDate);
+                //log.info("【BmsSynOA().jsnyDate2】,jsnyDate:{}", jsnyDate);
                 //table.setJsny(simpleDateFormat2.format(jsnyDate));//需求指出每个结算年月一致，就随机取最后一个为准
                 /*//封装每行明细的数据
                 InfinitusDetailTablesRow infinitusDetailTablesRow
@@ -173,9 +172,9 @@ public class ScheduledTasks {
             if (null == jsnyDateTable || "".equals(jsnyDateTable)) {
                 jsnyDateTable = new Date();
             }
-            log.info("-------------------------------table.setJsny=", simpleDateFormat2.format(jsnyDateTable));
+            //log.info("-------------------------------table.setJsny=", simpleDateFormat2.format(jsnyDateTable));
             table.setJsny(simpleDateFormat2.format(jsnyDateTable));
-            log.info("【BmsSynOA().table.getJsny()】,table.getJsny():{}", table.getJsny());
+            //log.info("【BmsSynOA().table.getJsny()】,table.getJsny():{}", table.getJsny());
             if (null == table.getJsny() || "".equals(table.getJsny())) {
                 table.setJsny(simpleDateFormat2.format(new Date()));
             }
@@ -190,11 +189,10 @@ public class ScheduledTasks {
             JSONObject resultJson = Httputil.doPostJson(url,jsonObject,"");
             log.info("【提交接口返回数据resultJson】----:resultJson:{}", resultJson);
             if (null != resultJson.get("success") && resultJson.get("success").equals(true)) {
-                log.info("【BmsSynOA修改已传oa_flag的值】,e.getCode():{}", e.getCode());
+                //log.info("【BmsSynOA修改已传oa_flag的值】,e.getCode():{}", e.getCode());
                 billService.updateOA_flag(OaFlagEnum.SUCCESS.getCode(), e.getCode());//提交成功则改变oa_flag的值0 标识未上传  2 已经上传  4上传失败
-                log.info("【 table.getJsny().substring(0, 7)】， table.getJsny().substring(0, 7)：{}", table.getJsny().substring(0, 7));
+                //log.info("【 table.getJsny().substring(0, 7)】， table.getJsny().substring(0, 7)：{}", table.getJsny().substring(0, 7));
                 String jsny = billService.getBillListDetail_JSNY(e.getCode(), e.getCreate_id());
-                //String jsny_end="0";
                 if (null == jsny || "".equals(jsny)) {
                     jsny=simpleDateFormat2.format(new Date());
                 }
