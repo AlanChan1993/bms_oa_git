@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @MapperScan("com.infinitus.bms_oa.mapper")
+@MapperScan("com.infinitus.bms_oa.bms_op.mapper")
 @EnableScheduling
 //@EnableTransactionManagement//用于事务回滚
 public class BmsOaApplication {

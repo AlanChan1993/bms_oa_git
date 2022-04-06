@@ -10,14 +10,14 @@ spring: #springboot的配置
     driver-class-name: com.mysql.cj.jdbc.Driver
     #3306是mysql的端口号 serverTimezone是定义时区，照抄就好，mysql高版本需要定义这些东西
     #useSSL也是某些高版本mysql需要问有没有用SSL连接
-#    url: jdbc:mysql://127.0.0.1:3306/alan?useSSL=false&autoReconnect=true&serverTimezone=GMT%2B8&characterEncoding=utf8&rewriteBatchedStatements=true
-#    username: root  #数据库用户名，root为管理员
-#    password: 123456 #该数据库用户的密码
+    url: jdbc:mysql://127.0.0.1:3306/alan?useSSL=false&autoReconnect=true&serverTimezone=GMT%2B8&characterEncoding=utf8&rewriteBatchedStatements=true
+    username: root  #数据库用户名，root为管理员
+    password: 123456 #该数据库用户的密码
 
     #bms测试库
-    url: jdbc:mysql://10.86.72.222:3311/bms?useSSL=false&autoReconnect=true&serverTimezone=GMT%2B8&characterEncoding=utf8&rewriteBatchedStatements=true
-    username: mysqlljb
-    password: abcd_1234
+#    url: jdbc:mysql://10.86.72.222:3311/bms?useSSL=false&autoReconnect=true&serverTimezone=GMT%2B8&characterEncoding=utf8&rewriteBatchedStatements=true
+#    username: mysqlljb
+#    password: abcd_1234
 
     #bms生产库
 #    url: jdbc:mysql://10.86.72.116:3306/bms?useSSL=false&autoReconnect=true&serverTimezone=GMT%2B8&characterEncoding=utf8&rewriteBatchedStatements=true

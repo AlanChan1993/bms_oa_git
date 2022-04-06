@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.infinitus.bms_oa.bms_op.mapper.NopoItemsMapper">
+    <!--定义一个名为BaseResultMap的返回类型-->
+    <resultMap id="BaseResultMap" type="com.infinitus.bms_oa.bms_op.empty.OP_ThirdBody_NopoItems">
+        <result column="ACCOUNT_CODE" property="accountCode" jdbcType="VARCHAR"></result>
+        <result column="ACCOUNT_NAME" property="accountName" jdbcType="VARCHAR"></result>
+        <result column="COMMENT" property="comment" jdbcType="VARCHAR"></result>
+        <result column="COSTCENTER_CODE" property="costCenterCode" jdbcType="VARCHAR"></result>
+        <result column="COSTCENTER_NAME" property="costCenterName" jdbcType="VARCHAR"></result>
+        <result column="CURRENCY_CODE" property="currencyCode" jdbcType="VARCHAR"></result>
+        <result column="CURRENCY_NAME" property="currencyName" jdbcType="VARCHAR"></result>
+        <result column="INTERNALORDER_CODE" property="internalOrderCode" jdbcType="VARCHAR"></result>
+        <result column="INTERNALORDER_NAME" property="internalOrderName" jdbcType="VARCHAR"></result>
+        <result column="ITEM_CODE" property="itemCode" jdbcType="VARCHAR"></result>
+        <result column="NO_BILL_APPLY_ID" property="noBillApplyId" jdbcType="VARCHAR"></result>
+        <result column="PAYM_AMT" property="paymentAmount" jdbcType="VARCHAR"></result>
+    </resultMap>
+
+    <select id="getAllNopoItemsServiceByInvoice_no" resultMap="BaseResultMap">
+        SELECT ACCOUNT_CODE,ACCOUNT_NAME,COMMENT,COSTCENTER_CODE,COSTCENTER_NAME,CURRENCY_CODE,CURRENCY_NAME,
+        INTERNALORDER_CODE,INTERNALORDER_NAME,ITEM_CODE,NO_BILL_APPLY_ID,PAYM_AMT
+        FROM BMS_OP_ORDER_DETAIL
+        WHERE INVOICE_NO=#{Invoice_no,jdbcType=VARCHAR}
+    </select>
+
+    <update id="updateOpFlag" >
+        update BMS_OP_ORDER_DETAIL set op_flag=#{opFlag},synDate=now()
+         where INVOICE_NO=#{Invoice_no,jdbcType=VARCHAR}
+    </update>
+
+
+</mapper>
