@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.infinitus.bms_oa.bms_op.mapper.PaymentApplicationVOMapper">
+    <!--定义一个名为BaseResultMap的返回类型-->
+    <resultMap id="BaseResultMap" type="com.infinitus.bms_oa.bms_op.empty.OP_ScondBody_PaymentApplication">
+        <result column="app_org_code" property="orgCode" jdbcType="VARCHAR"></result>
+        <result column="app_user_real_name" property="userRealName" jdbcType="VARCHAR"></result>
+        <result column="app_user_name" property="username" jdbcType="VARCHAR"></result>
+        <result column="APP_DATE" property="applicantDate" jdbcType="VARCHAR"></result>
+        <result column="COMMENT" property="commentNote" jdbcType="VARCHAR"></result>
+        <result column="COMPANY_CODE" property="companyCode" jdbcType="VARCHAR"></result>
+        <result column="COMPANY_NAME" property="companyName" jdbcType="VARCHAR"></result>
+        <result column="INVOICE_NO" property="invoiceNO" jdbcType="VARCHAR"></result>
+        <result column="IS_CLOUD_PAY" property="isCloudPay" jdbcType="VARCHAR"></result>
+        <result column="NO_BILL_POST" property="noBillPost" jdbcType="VARCHAR"></result>
+        <result column="PAY_METH_CODE" property="payMethodCode" jdbcType="VARCHAR"></result>
+        <result column="PAY_METH_NAME" property="payMethodName" jdbcType="VARCHAR"></result>
+        <result column="PAYMENTDATELIMIT" property="paymentDateLimit" jdbcType="VARCHAR"></result>
+        <result column="SUPPLIER_ID" property="supplierId" jdbcType="VARCHAR"></result>
+        <result column="SUPPLIER_NAME" property="supplierName" jdbcType="VARCHAR"></result>
+        <result column="TITLE" property="title" jdbcType="VARCHAR"></result>
+    </resultMap>
+
+    <select id="getAllPaymentApplicationVO" resultMap="BaseResultMap">
+        SELECT APP_ORG_CODE,APP_USER_REAL_NAME,APP_USER_NAME,APP_DATE,COMMENT,COMMENT,COMPANY_CODE,COMPANY_NAME,INVOICE_NO,IS_CLOUD_PAY,NO_BILL_POST,
+        PAY_METH_CODE,PAY_METH_NAME,PAYMENTDATELIMIT,SUPPLIER_ID,SUPPLIER_NAME,TITLE
+        FROM BMS_OP_ORDER_HEADER
+        WHERE INVOICE_NO NOT IN  (SELECT C.INVOICE_NO FROM BMS_PO_API_RETURN C)
+        AND (OP_FLAG IS NULL OR OP_FLAG = '' OR OP_FLAG='0' )
+    </select>
+
+    <update id="updateOpFlag" >
+        UPDATE BMS_OP_ORDER_HEADER SET OP_FLAG=#{opFlag},SYNDATE=NOW()
+         WHERE INVOICE_NO=#{Invoice_no,jdbcType=VARCHAR}
+    </update>
+
+
+</mapper>

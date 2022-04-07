@@ -160,7 +160,7 @@ public class InfinitusController {
                     //4.接收返回实例
                     String jsonObject = JSONObject.toJSONString(infinitus);
                     log.info("【提交接口Json数据】----:jsonObject:{}", jsonObject);
-                    JSONObject resultJson = Httputil.doPostJson(url, jsonObject, "");
+                    JSONObject resultJson = Httputil.doPostJson(url, jsonObject, "","");
                     log.info("【提交接口返回数据resultJson】----:resultJson:{}", resultJson);
                     if (resultJson.get("success") != null && resultJson.get("success").equals(true)) {
                         service.updateOA_flag("2", list.get(i).getId(), list.get(i).getAdj_no());

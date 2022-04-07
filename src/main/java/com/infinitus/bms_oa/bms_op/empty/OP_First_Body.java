@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class OP_First_Body {
-    private String personVo;
     private final String documentInfoVo="{\"id\":0,\"systemId\":0}";
+    private String personVo;
     private String paymentApplicationVo;
 }

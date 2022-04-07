@@ -186,7 +186,7 @@ public class ScheduledTasks {
             String jsonObject = JSONObject.toJSONString(infinitus);
             log.info("【BmsSynOA】····，jsonObject:{}",jsonObject);
             //4.httppost提交数据到OA
-            JSONObject resultJson = Httputil.doPostJson(url,jsonObject,"");
+            JSONObject resultJson = Httputil.doPostJson(url,jsonObject,"Authorization","");
             log.info("【提交接口返回数据resultJson】----:resultJson:{}", resultJson);
             if (null != resultJson.get("success") && resultJson.get("success").equals(true)) {
                 //log.info("【BmsSynOA修改已传oa_flag的值】,e.getCode():{}", e.getCode());

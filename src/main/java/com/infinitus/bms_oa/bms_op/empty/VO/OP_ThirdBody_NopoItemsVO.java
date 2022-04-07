@@ -1,9 +1,9 @@
-package com.infinitus.bms_oa.bms_op.empty;
+package com.infinitus.bms_oa.bms_op.empty.VO;
 
 import lombok.Data;
 
 @Data
-public class OP_ThirdBody_NopoItems {
+public class OP_ThirdBody_NopoItemsVO {
     private String accountCode;//account_Code
     private String accountName;//account_Name
     private String comment;//comment
@@ -17,9 +17,4 @@ public class OP_ThirdBody_NopoItems {
     private String noBillApplyId;//no_Bill_Apply_Id
     private String paymentAmount;//paym_amt
     private String tty;//account_Code+/accountName
-
-    private String expenseCategoryCode;//exp_cate_code
-    private String expenseCategoryName;//exp_cate_name
-    private String flowInitiator;//flow_Initiator
-    private String flowInitiatorName;//flow_InitiatorName
 }

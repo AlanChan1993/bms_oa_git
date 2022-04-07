@@ -15,11 +15,18 @@
         <result column="ITEM_CODE" property="itemCode" jdbcType="VARCHAR"></result>
         <result column="NO_BILL_APPLY_ID" property="noBillApplyId" jdbcType="VARCHAR"></result>
         <result column="PAYM_AMT" property="paymentAmount" jdbcType="VARCHAR"></result>
+
+        <result column="EXP_CATE_CODE" property="expenseCategoryCode" jdbcType="VARCHAR"></result>
+        <result column="EXP_CATE_NAME" property="expenseCategoryName" jdbcType="VARCHAR"></result>
+        <result column="FLOW_INITIATOR" property="flowInitiator" jdbcType="VARCHAR"></result>
+        <result column="FLOW_INITIATOR_NAME" property="flowInitiatorName" jdbcType="VARCHAR"></result>
+
     </resultMap>
 
     <select id="getAllNopoItemsServiceByInvoice_no" resultMap="BaseResultMap">
         SELECT ACCOUNT_CODE,ACCOUNT_NAME,COMMENT,COSTCENTER_CODE,COSTCENTER_NAME,CURRENCY_CODE,CURRENCY_NAME,
-        INTERNALORDER_CODE,INTERNALORDER_NAME,ITEM_CODE,NO_BILL_APPLY_ID,PAYM_AMT
+        INTERNALORDER_CODE,INTERNALORDER_NAME,ITEM_CODE,NO_BILL_APPLY_ID,PAYM_AMT,EXP_CATE_CODE,EXP_CATE_NAME,
+        FLOW_INITIATOR,FLOW_INITIATOR_NAME
         FROM BMS_OP_ORDER_DETAIL
         WHERE INVOICE_NO=#{Invoice_no,jdbcType=VARCHAR}
     </select>

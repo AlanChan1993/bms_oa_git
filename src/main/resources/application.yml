@@ -33,14 +33,24 @@ mybatis:  #mybatyis的配置
 logging:
   level:
     com.gooann.Mapper: debug
+    #info/warn/trace: info/warn;
+    com.staticzz: debug
 
 BMS:
   URL:
     #OA测试地址-发起流程
     billToOA: https://oa-test.infinitus-int.com/api/infinitusint/public/workflow/doCreateWorkflowRequest
     #OA生产地址-发起流程
-#    billToOA: https://oa.infinitus-int.com/api/infinitusint/public/workflow/doCreateWorkflowRequest
+    #billToOA: https://oa.infinitus-int.com/api/infinitusint/public/workflow/doCreateWorkflowRequest
+    #op准生产地址：
+    bmsToOP: https://erp-trial.infinitus.com.cn/esop-op/admin/esb/op/accounting/ExpenseAccount
+    #op生产地址：
+    #bmsToOP: https://erp.infinitus.com.cn/esop-op/admin/esb/op/accounting/ExpenseAccount
 
+target:
+  token:
+    #BMS->OP秘钥
+    bmsToOP: ESB-ESOP-SIGNATURE
 
 
 

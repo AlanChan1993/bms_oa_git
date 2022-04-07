@@ -13,15 +13,15 @@ import org.apache.http.util.EntityUtils;
 public class Httputil {
     private static final int SUCCESS_STATUS = 200;
 
-    public static JSONObject doPostJson(String url, String json, String token) {
+    public static JSONObject doPostJson(String url, String json, String header, String token) {
         CloseableHttpClient client = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(url);
         JSONObject response = null;
         try {
-            StringEntity s = new StringEntity(json,"UTF-8");
+            StringEntity s = new StringEntity(json, "UTF-8");
             s.setContentEncoding("UTF-8");
             s.setContentType("application/json;charset=utf-8");
-            httpPost.setHeader("Authorization", token);
+            httpPost.setHeader(header, token);
             httpPost.setEntity(s);
             HttpResponse res = client.execute(httpPost);
             if (SUCCESS_STATUS == res.getStatusLine().getStatusCode()) {
