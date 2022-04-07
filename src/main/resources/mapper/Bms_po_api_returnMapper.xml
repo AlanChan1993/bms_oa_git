@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.infinitus.bms_oa.bms_op.mapper.Bms_po_api_returnMapper">
+    <!--定义一个名为BaseResultMap的返回类型-->
+    <resultMap id="BaseResultMap" type="com.infinitus.bms_oa.bms_op.empty.Bms_po_api_return">
+        <result column="INVOICE_NO" property="invoiceNO" jdbcType="VARCHAR"></result>
+        <result column="OP_ID" property="OP_ID" jdbcType="INTEGER"></result>
+        <result column="MSG_TYPE" property="Msg_Type" jdbcType="VARCHAR"></result>
+        <result column="MSG_LOG" property="Msg_Log" jdbcType="VARCHAR"></result>
+        <result column="DOCNO" property="Docno" jdbcType="VARCHAR"></result>
+        <result column="OPSTATUS" property="opstatus" jdbcType="VARCHAR"></result>
+    </resultMap>
+
+    <insert id="createBms_po_api_return" parameterType="com.infinitus.bms_oa.bms_op.empty.Bms_po_api_return">
+        INSERT INTO BMS_PO_API_RETURN (INVOICE_NO,OP_ID,MSG_TYPE,MSG_LOG,DOCNO,OPSTATUS)
+        VALUES(#{invoiceNO},#{OP_ID},#{Msg_Type},#{Msg_Log},#{Docno},#{opstatus})
+    </insert>
+</mapper>

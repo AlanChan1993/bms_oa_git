@@ -4,10 +4,10 @@ import lombok.Data;
 
 @Data
 public class Bms_po_api_return {
-    private String Invoice_No;
-    private int OP_ID;
+    private String invoiceNO;
+    private Integer OP_ID;
     private String Msg_Type;
     private String Msg_Log;
     private String Docno;
-    private String opstatus;
+    private final String opstatus="0";
 }

@@ -5,10 +5,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.infinitus.bms_oa.bms_op.empty.*;
 import com.infinitus.bms_oa.bms_op.empty.VO.OP_ScondBody_PaymentApplicationVO;
 import com.infinitus.bms_oa.bms_op.empty.VO.OP_ThirdBody_NopoItemsVO;
+import com.infinitus.bms_oa.bms_op.service.Bms_po_api_returnService;
 import com.infinitus.bms_oa.bms_op.service.NopoItemsService;
 import com.infinitus.bms_oa.bms_op.service.PaymentApplicationVO_Service;
+import com.infinitus.bms_oa.enums.OaFlagEnum;
 import com.infinitus.bms_oa.utils.DateUtil;
 import com.infinitus.bms_oa.utils.Httputil;
+import com.infinitus.bms_oa.utils.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +29,13 @@ import java.util.List;
 @Component
 public class BMS_OP_TASKS {
     @Autowired
-    private NopoItemsService service;
+    private NopoItemsService nopoItemsService;
 
     @Autowired
     private PaymentApplicationVO_Service payService;
+
+    @Autowired
+    private Bms_po_api_returnService bmsPoApiReturnService;
 
     @Value("${BMS.URL.bmsToOP}")
     private String  url;
@@ -87,7 +93,7 @@ public class BMS_OP_TASKS {
                     ex.printStackTrace();
                 }
                 //2、查询明细
-                List<OP_ThirdBody_NopoItems> nopoItemsList = service.getAllNopoItemsServiceByInvoice_no(e.getInvoiceNO());
+                List<OP_ThirdBody_NopoItems> nopoItemsList = nopoItemsService.getAllNopoItemsServiceByInvoice_no(e.getInvoiceNO());
                 List<OP_ThirdBody_NopoItemsVO> nopoItemsVOS = new ArrayList<>();
 
                 if (nopoItemsList != null && nopoItemsList.size() > 0) {
@@ -105,18 +111,36 @@ public class BMS_OP_TASKS {
                 //3、封装数据
                 JSONObject paymentApplicationVOJson = (JSONObject) JSONObject.toJSON(paymentApplicationVO);
                 first_body.setPaymentApplicationVo(JSON.toJSONString(paymentApplicationVOJson));
+
+                String jsonObject = JSONObject.toJSONString(first_body);
+                log.info("info【url】=:{}", url);
+                log.info("【synOpPayMent】jsonObject={}",jsonObject);
                 try {
-                    String jsonObject = JSONObject.toJSONString(first_body);
-                    log.info("info【url】=:{}", url);
-                    log.info("【synOpPayMent】jsonObject={}",jsonObject);
                     //4.httppost提交数据到OA
                     JSONObject resultJson = Httputil.doPostJson(url, jsonObject, "signature", "e8a0e45667b06676d1b87b2b5e593fdd");
                     log.info("【提交接口返回结果】=:{}", resultJson);
                     //5.接受返回信息插入相关表bms_po_api_return
+                    if (null != resultJson.get("success") && resultJson.get("success").equals(true)) {
+                        Bms_po_api_return bmsPoApiReturn = new Bms_po_api_return();
+                        JSONObject bmsPoApiReturnJson = JSONObject.parseObject(String.valueOf(resultJson.get("returnObject")));//将建json对象转换为Person对象
+                        bmsPoApiReturn.setDocno((String) bmsPoApiReturnJson.get("Docno"));
+                        bmsPoApiReturn.setInvoiceNO((String) bmsPoApiReturnJson.get("invoiceNO"));
+                        bmsPoApiReturn.setMsg_Log((String) bmsPoApiReturnJson.get("Msg_Log"));
+                        bmsPoApiReturn.setMsg_Type((String) bmsPoApiReturnJson.get("Msg_Type"));
+                        if (!bmsPoApiReturnJson.get("OP_ID").equals("") && null != bmsPoApiReturnJson.get("OP_ID")) {
+                            Integer a = Integer.parseInt((String) bmsPoApiReturnJson.get("OP_ID"));
+                            bmsPoApiReturn.setOP_ID(a);
+                        }
 
-                    //6.根据单号更新同步状态
-
+                        int i = bmsPoApiReturnService.createBms_po_api_return(bmsPoApiReturn);
+                        log.info("【createBms_po_api_return】i : {}", i);
+                        //6.根据单号更新同步状态
+                        nopoItemsService.updateOpFlag(OaFlagEnum.SUCCESS.getCodeString(), e.getInvoiceNO());
+                        payService.updateOpFlag(OaFlagEnum.SUCCESS.getCodeString(), e.getInvoiceNO());
+                    }
                 } catch (Exception ex) {
+                    nopoItemsService.updateOpFlag(OaFlagEnum.FALSE.getCodeString(), e.getInvoiceNO());
+                    payService.updateOpFlag(OaFlagEnum.FALSE.getCodeString(), e.getInvoiceNO());
                     log.info("【synOpPayMent】同步到OP失败=:{}",ex);
                 }
             });
