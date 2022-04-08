@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -128,10 +129,8 @@ public class BMS_OP_TASKS {
                         bmsPoApiReturn.setMsg_Log((String) bmsPoApiReturnJson.get("Msg_Log"));
                         bmsPoApiReturn.setMsg_Type((String) bmsPoApiReturnJson.get("Msg_Type"));
                         if (!bmsPoApiReturnJson.get("OP_ID").equals("") && null != bmsPoApiReturnJson.get("OP_ID")) {
-                            Integer a = Integer.parseInt((String) bmsPoApiReturnJson.get("OP_ID"));
-                            bmsPoApiReturn.setOP_ID(a);
+                            bmsPoApiReturn.setOP_ID(Long.valueOf((String) bmsPoApiReturnJson.get("OP_ID")));
                         }
-
                         int i = bmsPoApiReturnService.createBms_po_api_return(bmsPoApiReturn);
                         log.info("【createBms_po_api_return】i : {}", i);
                         //6.根据单号更新同步状态
@@ -139,9 +138,9 @@ public class BMS_OP_TASKS {
                         payService.updateOpFlag(OaFlagEnum.SUCCESS.getCodeString(), e.getInvoiceNO());
                     }
                 } catch (Exception ex) {
+                    log.info("【synOpPayMent】同步到OP失败=:{}",ex);
                     nopoItemsService.updateOpFlag(OaFlagEnum.FALSE.getCodeString(), e.getInvoiceNO());
                     payService.updateOpFlag(OaFlagEnum.FALSE.getCodeString(), e.getInvoiceNO());
-                    log.info("【synOpPayMent】同步到OP失败=:{}",ex);
                 }
             });
         }

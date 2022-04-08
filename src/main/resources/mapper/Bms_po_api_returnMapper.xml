@@ -4,7 +4,7 @@
     <!--定义一个名为BaseResultMap的返回类型-->
     <resultMap id="BaseResultMap" type="com.infinitus.bms_oa.bms_op.empty.Bms_po_api_return">
         <result column="INVOICE_NO" property="invoiceNO" jdbcType="VARCHAR"></result>
-        <result column="OP_ID" property="OP_ID" jdbcType="INTEGER"></result>
+        <result column="OP_ID" property="OP_ID" jdbcType="BIGINT"></result>
         <result column="MSG_TYPE" property="Msg_Type" jdbcType="VARCHAR"></result>
         <result column="MSG_LOG" property="Msg_Log" jdbcType="VARCHAR"></result>
         <result column="DOCNO" property="Docno" jdbcType="VARCHAR"></result>
