@@ -99,13 +99,20 @@ public class BMS_OP_TASKS {
 
                 if (nopoItemsList != null && nopoItemsList.size() > 0) {
                     for (OP_ThirdBody_NopoItems item : nopoItemsList) {
+                        OP_ThirdBody_NopoItemsVO nopoItemsVO = new OP_ThirdBody_NopoItemsVO();
                         paymentApplicationVO.setExpenseCategoryCode(item.getExpenseCategoryCode());
                         paymentApplicationVO.setExpenseCategoryName(item.getExpenseCategoryName());
                         paymentApplicationVO.setFlowInitiator(item.getFlowInitiator());
                         paymentApplicationVO.setFlowInitiatorName(item.getFlowInitiatorName());
                         item.setTty(item.getAccountCode().concat("/"+item.getAccountName()));
+                        if ("".equals(item.getNoBillApplyId()) || null == item.getNoBillApplyId()) {
+                            item.setNoBillApplyId("0");
+                        }
+
+                        BeanUtils.copyProperties(item, nopoItemsVO);
+                        nopoItemsVO.setNoBillApplyId(Integer.parseInt(item.getNoBillApplyId()));
+                        nopoItemsVOS.add(nopoItemsVO);
                     }
-                    BeanUtils.copyProperties(nopoItemsList, nopoItemsVOS);
                 }
                 paymentApplicationVO.setNoPoItems(nopoItemsVOS);
 
@@ -136,6 +143,7 @@ public class BMS_OP_TASKS {
                         //6.根据单号更新同步状态
                         nopoItemsService.updateOpFlag(OaFlagEnum.SUCCESS.getCodeString(), e.getInvoiceNO());
                         payService.updateOpFlag(OaFlagEnum.SUCCESS.getCodeString(), e.getInvoiceNO());
+                        log.info("【synOpPayMent】同步到OP成功");
                     }
                 } catch (Exception ex) {
                     log.info("【synOpPayMent】同步到OP失败=:{}",ex);

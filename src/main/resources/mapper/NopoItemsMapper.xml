@@ -14,7 +14,7 @@
         <result column="INTERNALORDER_NAME" property="internalOrderName" jdbcType="VARCHAR"></result>
         <result column="ITEM_CODE" property="itemCode" jdbcType="VARCHAR"></result>
         <result column="NO_BILL_APPLY_ID" property="noBillApplyId" jdbcType="VARCHAR"></result>
-        <result column="PAYM_AMT" property="paymentAmount" jdbcType="VARCHAR"></result>
+        <result column="PAYM_AMT" property="paymentAmount" jdbcType="DECIMAL"></result>
 
         <result column="EXP_CATE_CODE" property="expenseCategoryCode" jdbcType="VARCHAR"></result>
         <result column="EXP_CATE_NAME" property="expenseCategoryName" jdbcType="VARCHAR"></result>

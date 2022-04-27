@@ -2,6 +2,8 @@ package com.infinitus.bms_oa.bms_op.empty.VO;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class OP_ThirdBody_NopoItemsVO {
     private String accountCode;//account_Code
@@ -14,7 +16,7 @@ public class OP_ThirdBody_NopoItemsVO {
     private String internalOrderCode;//internalOrder_Code
     private String internalOrderName;//internalOrder_Name
     private String itemCode;//item_Code
-    private String noBillApplyId;//no_Bill_Apply_Id
-    private String paymentAmount;//paym_amt
+    private Integer noBillApplyId;//no_Bill_Apply_Id
+    private BigDecimal paymentAmount;//paym_amt
     private String tty;//account_Code+/accountName
 }
