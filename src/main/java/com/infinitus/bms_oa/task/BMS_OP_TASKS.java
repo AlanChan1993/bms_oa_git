@@ -87,9 +87,9 @@ public class BMS_OP_TASKS {
                 //将string类型的时间转化为时间戳
                 try {
                     Date dateTimeApplicant = format.parse(e.getApplicantDate());
-                    paymentApplicationVO.setApplicantDate((int) (dateTimeApplicant.getTime()));
+                    paymentApplicationVO.setApplicantDate((dateTimeApplicant.getTime()));
                     Date dateTimePaymentDateLimit =format.parse(e.getPaymentDateLimit());
-                    paymentApplicationVO.setPaymentDateLimit((int) dateTimePaymentDateLimit.getTime());
+                    paymentApplicationVO.setPaymentDateLimit(dateTimePaymentDateLimit.getTime());
                 } catch (ParseException ex) {
                     ex.printStackTrace();
                 }

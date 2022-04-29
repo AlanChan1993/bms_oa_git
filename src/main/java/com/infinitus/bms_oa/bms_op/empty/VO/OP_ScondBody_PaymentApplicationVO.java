@@ -12,7 +12,7 @@ public class OP_ScondBody_PaymentApplicationVO {
     private String username;//app_user_name*/
 
     private MaskedBankAccountCode applicant = new MaskedBankAccountCode();
-    private int applicantDate;//app_date
+    private long applicantDate;//app_date
     private final int cloudSupplierId = 0;
     private String commentNote;//comment
     private String companyCode;//company_Code
@@ -30,7 +30,7 @@ public class OP_ScondBody_PaymentApplicationVO {
     private  String noPoprepayIterms;
     private String payMethodCode;//pay_meth_code
     private String payMethodName;//pay_meth_name
-    private int paymentDateLimit;//paymentDateLimit精确到毫秒级
+    private long paymentDateLimit;//paymentDateLimit精确到毫秒级
     private  String prepayIterms;
     private final int subType = 2;
     private String supplierId;//supplier_Id
