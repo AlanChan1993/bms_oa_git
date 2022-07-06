@@ -1,0 +1,56 @@
+server:
+  #8080:bms_oa  #8082:bms_op
+  port: 8082
+  
+spring: #springboot的配置
+  datasource: #定义数据源
+    #下面这两个配置，可以在每次连接的时候判断一些连接是否有效
+    druid.test-on-borrow: true
+    druid.test-while-idle: true
+    db-type: MYSQL
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #3306是mysql的端口号 serverTimezone是定义时区，照抄就好，mysql高版本需要定义这些东西
+    #useSSL也是某些高版本mysql需要问有没有用SSL连接
+#    url: jdbc:mysql://127.0.0.1:3306/alan?useSSL=false&autoReconnect=true&serverTimezone=GMT%2B8&characterEncoding=utf8&rewriteBatchedStatements=true
+#    username: root  #数据库用户名，root为管理员
+#    password: 123456 #该数据库用户的密码
+
+    #bms生产库
+    url: jdbc:mysql://10.86.72.116:3306/bms?useSSL=false&autoReconnect=true&serverTimezone=GMT%2B8&characterEncoding=utf8&rewriteBatchedStatements=true
+    username: mysqlljb
+    password: abc_123
+  jpa:
+    show-sql: true
+
+mybatis:  #mybatyis的配置
+  mapper-locations: classpath:mapper/*Mapper.xml #指定mapper的配置文件的路径是mapper文件夹下的所有 xml文件。
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+logging:
+  level:
+    com.gooann.Mapper: debug
+    #info/warn/trace: info/warn;
+    com.staticzz: debug
+
+BMS:
+  URL:
+    #OA生产地址-发起流程
+    billToOA: https://oa.infinitus-int.com/api/infinitusint/public/workflow/doCreateWorkflowRequest
+
+    #op生产地址：
+    bmsToOP: https://erp.infinitus.com.cn/esop-op/admin/esb/op/accounting/ExpenseAccount
+
+target:
+  token:
+    #BMS->OP秘钥
+    bmsToOP: ESB-ESOP-SIGNATURE
+
+
+
+
+
+
+
+
+
+
