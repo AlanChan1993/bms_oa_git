@@ -8,26 +8,27 @@
     <!--定义一个名为BaseResultMap的返回类型-->
     <resultMap id="BaseResultMap" type="com.infinitus.bms_oa.wms_store.empty.W_STORE_SKUS">
 
-        <result column="store_no" property="store_no" jdbcType="VARCHAR"></result>
-        <result column="store_fullName" property="store_fullName" jdbcType="VARCHAR"></result>
-        <result column="store_shortName" property="store_shortName" jdbcType="VARCHAR"></result>
-        <result column="store_spuNo" property="store_spuNo" jdbcType="VARCHAR"></result>
-        <result column="store_url" property="store_url" jdbcType="VARCHAR"></result>
-        <result column="store_type" property="store_type" jdbcType="VARCHAR"></result>
-        <result column="store_number" property="store_number" jdbcType="INTEGER"></result>
-        <result column="store_size" property="store_size" jdbcType="INTEGER"></result>
-        <result column="store_totalPages" property="store_totalPages" jdbcType="INTEGER"></result>
-        <result column="store_totalElements" property="store_totalElements" jdbcType="INTEGER"></result>
+        <result column="store_no" property="no" jdbcType="VARCHAR"></result>
+        <result column="store_fullName" property="fullName" jdbcType="VARCHAR"></result>
+        <result column="store_shortName" property="shortName" jdbcType="VARCHAR"></result>
+        <result column="store_spuNo" property="spuNo" jdbcType="VARCHAR"></result>
+
+        <result column="store_number" property="number" jdbcType="INTEGER"></result>
+        <result column="store_size" property="size" jdbcType="INTEGER"></result>
+        <result column="store_totalPages" property="totalPages" jdbcType="INTEGER"></result>
+        <result column="store_totalElements" property="totalElements" jdbcType="INTEGER"></result>
         <result column="syn_date" property="syn_date" jdbcType="VARCHAR"></result>
+        <result column="commodityNo" property="commodityNo" jdbcType="VARCHAR"></result>
+        <result column="status" property="status" jdbcType="VARCHAR"></result>
     </resultMap>
     <!--插入语句-->
     <!--id要与W_STORE_SKUS_Mapper文件中表示插入的函数名一致，parameterType表示函数的输入参数的类型-->
     <insert id="insertW_STORE_SKUS" parameterType="com.infinitus.bms_oa.wms_store.empty.W_STORE_SKUS">
-      insert into W_STORE_SKUS(store_no,store_fullName,store_shortName,store_spuNo,store_url,store_type,store_number,
-        store_size,store_totalPages,store_totalElements,syn_date)
-      values(#{store_no,jdbcType=VARCHAR},#{store_fullName,jdbcType=VARCHAR},#{store_shortName,jdbcType=VARCHAR},
-      #{store_spuNo,jdbcType=VARCHAR},#{store_url,jdbcType=VARCHAR},#{store_type,jdbcType=VARCHAR},#{store_number,jdbcType=INTEGER}
-      ,#{store_size,jdbcType=INTEGER},#{store_totalPages,jdbcType=INTEGER},#{store_totalElements,jdbcType=INTEGER},#{syn_date,jdbcType=VARCHAR})/*SQL语句*/
+      insert into W_STORE_SKUS(store_no,store_fullName,store_shortName,store_spuNo,syn_date,commodityNo,status)
+      values(#{no,jdbcType=VARCHAR},#{fullName,jdbcType=VARCHAR},#{shortName,jdbcType=VARCHAR},
+      #{spuNo,jdbcType=VARCHAR},#{syn_date,jdbcType=VARCHAR},#{commodityNo,jdbcType=VARCHAR},
+      #{status,jdbcType=VARCHAR}
+      )
     </insert>
 
     <!--删除语句-->
@@ -43,6 +44,58 @@
 
     <!--修改语句-->
     <update id="updateW_STORE_SKUS" parameterType="com.infinitus.bms_oa.wms_store.empty.W_STORE_SKUS">
-
     </update>
+
+    <!--批量插入-->
+    <insert id="insertSkusList" parameterType="java.util.List">
+        INSERT INTO W_STORE_SKUS
+         ( store_no ,  store_fullName , store_shortName , store_spuNo , syn_date , commodityNo , status ) VALUES
+        <foreach collection ="list" item="list" separator ="," >
+            (
+            <if test="list.no!=null">
+                #{list.no , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.no==null">
+                '' ,
+            </if>
+
+            <if test="list.fullName!=null ">
+                #{list.fullName , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.fullName==null">
+                '' ,
+            </if>
+
+            <if test="list.shortName!=null ">
+                #{list.shortName , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.shortName==null">
+                '' ,
+            </if>
+
+           <if test="list.spuNo!=null ">
+               #{list.spuNo , jdbcType=VARCHAR} ,
+           </if>
+            <if test="list.spuNo==null">
+                'C' ,
+            </if>
+            CONCAT(UNIX_TIMESTAMP(NOW()), RIGHT(NOW(3), 3)),
+
+            <if test="list.commodityNo!=null ">
+                #{list.commodityNo , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.commodityNo==null">
+                '' ,
+            </if>
+
+            <if test="list.status!=null ">
+                #{list.status , jdbcType=VARCHAR}
+            </if>
+            <if test="list.status==null">
+                ''
+            </if>
+             )
+        </foreach>
+
+    </insert>
 </mapper>

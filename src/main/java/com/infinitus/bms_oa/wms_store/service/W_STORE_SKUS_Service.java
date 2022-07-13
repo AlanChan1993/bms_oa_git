@@ -9,4 +9,7 @@ public interface W_STORE_SKUS_Service {
 
     List<W_STORE_SKUS> queryW_STORE_SKUS();
 
+    boolean deleteW_STORE_SKUS();
+
+    boolean insertSkusList(List<W_STORE_SKUS> list);
 }

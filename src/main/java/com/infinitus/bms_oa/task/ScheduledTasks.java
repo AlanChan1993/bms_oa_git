@@ -6,17 +6,14 @@ import com.infinitus.bms_oa.enums.OaFlagEnum;
 import com.infinitus.bms_oa.pojo.*;
 import com.infinitus.bms_oa.service.BmsBillAdujestService;
 import com.infinitus.bms_oa.service.Bms_OA_logService;
-import com.infinitus.bms_oa.utils.Httputil;
-import com.infinitus.bms_oa.utils.InfinitusUtil;
+import com.infinitus.bms_oa.utils.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -186,7 +183,7 @@ public class ScheduledTasks {
             String jsonObject = JSONObject.toJSONString(infinitus);
             log.info("【BmsSynOA】····，jsonObject:{}",jsonObject);
             //4.httppost提交数据到OA
-            JSONObject resultJson = Httputil.doPostJson(url,jsonObject,"Authorization","");
+            JSONObject resultJson = HttpUtil.doPostJson(url,jsonObject,"Authorization","");
             log.info("【提交接口返回数据resultJson】----:resultJson:{}", resultJson);
             if (null != resultJson.get("success") && resultJson.get("success").equals(true)) {
                 //log.info("【BmsSynOA修改已传oa_flag的值】,e.getCode():{}", e.getCode());

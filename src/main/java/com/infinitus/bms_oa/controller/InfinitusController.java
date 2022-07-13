@@ -8,8 +8,7 @@ import com.infinitus.bms_oa.pojo.DTO.BillStatusDTO;
 import com.infinitus.bms_oa.pojo.VO.ResultVO;
 import com.infinitus.bms_oa.service.BmsBillAdujestService;
 import com.infinitus.bms_oa.service.Bms_OA_logService;
-import com.infinitus.bms_oa.utils.DateUtil;
-import com.infinitus.bms_oa.utils.Httputil;
+import com.infinitus.bms_oa.utils.HttpUtil;
 import com.infinitus.bms_oa.utils.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -160,7 +158,7 @@ public class InfinitusController {
                     //4.接收返回实例
                     String jsonObject = JSONObject.toJSONString(infinitus);
                     log.info("【提交接口Json数据】----:jsonObject:{}", jsonObject);
-                    JSONObject resultJson = Httputil.doPostJson(url, jsonObject, "","");
+                    JSONObject resultJson = HttpUtil.doPostJson(url, jsonObject, "","");
                     log.info("【提交接口返回数据resultJson】----:resultJson:{}", resultJson);
                     if (resultJson.get("success") != null && resultJson.get("success").equals(true)) {
                         service.updateOA_flag("2", list.get(i).getId(), list.get(i).getAdj_no());

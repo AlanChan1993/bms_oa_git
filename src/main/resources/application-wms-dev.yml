@@ -41,8 +41,18 @@ target:
     #BMS->OP秘钥
     bmsToOP: ESB-ESOP-SIGNATURE
 
-
-
+#dev 消费者秘钥与名称
+wms:
+  secret:
+    value: VZOOQQDVXPA0H8DYMXRXPAR0Y7Z46YWS
+  keyId:
+    value: wms
+  url:
+    value: https://gapi-dev.infinitus.com.cn
+  listskus:
+    value: /product-api/skus?
+  ListCommodities:
+    value: /product-api/commodities?
 
 
 

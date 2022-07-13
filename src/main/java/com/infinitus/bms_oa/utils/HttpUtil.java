@@ -2,15 +2,23 @@ package com.infinitus.bms_oa.utils;
 
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+
 @Slf4j
-public class Httputil {
+public class HttpUtil {
     private static final int SUCCESS_STATUS = 200;
 
     public static JSONObject doPostJson(String url, String json, String header, String token) {
@@ -38,5 +46,36 @@ public class Httputil {
         }
         return response;
     }
+
+    public static String httpGet(String url, String authorization, String date) throws UnsupportedEncodingException {
+        // 获取连接客户端工具
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        CloseableHttpResponse httpResponse=null;
+        String finalString = null;
+        HttpGet httpGet = new HttpGet(url);
+        /**公共参数添加至httpGet*/
+        if (authorization != null && !"".equals(authorization)) {
+            httpGet.setHeader("Authorization", authorization);
+        }
+        if (date != null && !"".equals(date)) {
+            httpGet.setHeader("Date", date);
+        }
+        try {
+            httpResponse = httpClient.execute(httpGet);
+            //log.info("httpResponse====================:{}",httpResponse);
+            HttpEntity entity = httpResponse.getEntity();
+            finalString= EntityUtils.toString(entity, "UTF-8");
+            try {
+                httpResponse.close();
+                httpClient.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return finalString;
+    }
+
 
 }

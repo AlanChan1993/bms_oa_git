@@ -10,8 +10,7 @@ import com.infinitus.bms_oa.bms_op.service.NopoItemsService;
 import com.infinitus.bms_oa.bms_op.service.PaymentApplicationVO_Service;
 import com.infinitus.bms_oa.enums.OaFlagEnum;
 import com.infinitus.bms_oa.utils.DateUtil;
-import com.infinitus.bms_oa.utils.Httputil;
-import com.infinitus.bms_oa.utils.StringUtil;
+import com.infinitus.bms_oa.utils.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,7 +25,7 @@ import java.util.Date;
 import java.util.List;
 
 @Slf4j
-@Component
+//@Component
 public class BMS_OP_TASKS {
     @Autowired
     private NopoItemsService nopoItemsService;
@@ -125,7 +123,7 @@ public class BMS_OP_TASKS {
                 log.info("【synOpPayMent】jsonObject={}",jsonObject);
                 try {
                     //4.httppost提交数据到OA
-                    JSONObject resultJson = Httputil.doPostJson(url, jsonObject, "signature", "e8a0e45667b06676d1b87b2b5e593fdd");
+                    JSONObject resultJson = HttpUtil.doPostJson(url, jsonObject, "signature", "e8a0e45667b06676d1b87b2b5e593fdd");
                     log.info("【提交接口返回结果】=:{}", resultJson);
                     //5.接受返回信息插入相关表bms_po_api_return
                     if (null != resultJson.get("success") && resultJson.get("success").equals(true)) {

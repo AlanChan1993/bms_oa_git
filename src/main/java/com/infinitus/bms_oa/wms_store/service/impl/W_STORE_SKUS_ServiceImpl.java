@@ -33,4 +33,14 @@ public class W_STORE_SKUS_ServiceImpl implements W_STORE_SKUS_Service {
         List<W_STORE_SKUS> list = mapper.queryW_STORE_SKUS();
         return list;
     }
+
+    @Override
+    public boolean deleteW_STORE_SKUS() {
+        return mapper.deleteW_STORE_SKUS();
+    }
+
+    @Override
+    public boolean insertSkusList(List<W_STORE_SKUS> list) {
+        return mapper.insertSkusList(list);
+    }
 }
