@@ -76,6 +76,7 @@ public class WmsStoreTasks {
         List<W_STORE_SKUS> skusList = (List<W_STORE_SKUS>) jsonResult.get("skus");
         //批量插入
         if(skusList!=null){
+            store_skus_service.deleteW_STORE_SKUS();//批量更新前先清理掉之前的数据
             store_skus_service.insertSkusList(skusList);
             log.info("skusList插入成功=:{}", skusList);
         }

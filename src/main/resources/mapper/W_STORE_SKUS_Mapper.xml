@@ -48,9 +48,10 @@
 
     <!--批量插入-->
     <insert id="insertSkusList" parameterType="java.util.List">
-        INSERT INTO W_STORE_SKUS
-         ( store_no ,  store_fullName , store_shortName , store_spuNo , syn_date , commodityNo , status ) VALUES
-        <foreach collection ="list" item="list" separator ="," >
+        INSERT ALL
+        <foreach item="list" index="index" collection="list">
+            INTO W_STORE_SKUS ( store_no ,  store_fullName , store_shortName , store_spuNo , syn_date , commodityNo , status )
+             VALUES
             (
             <if test="list.no!=null">
                 #{list.no , jdbcType=VARCHAR} ,
@@ -73,14 +74,13 @@
                 '' ,
             </if>
 
-           <if test="list.spuNo!=null ">
-               #{list.spuNo , jdbcType=VARCHAR} ,
-           </if>
+            <if test="list.spuNo!=null ">
+                #{list.spuNo , jdbcType=VARCHAR} ,
+            </if>
             <if test="list.spuNo==null">
                 'C' ,
             </if>
-            CONCAT(UNIX_TIMESTAMP(NOW()), RIGHT(NOW(3), 3)),
-
+            TO_CHAR(sysdate , 'yyyy-MM-dd HH24:mm:ss') ,
             <if test="list.commodityNo!=null ">
                 #{list.commodityNo , jdbcType=VARCHAR} ,
             </if>
@@ -94,8 +94,8 @@
             <if test="list.status==null">
                 ''
             </if>
-             )
+            )
         </foreach>
-
+        SELECT 1 FROM DUAL
     </insert>
 </mapper>
