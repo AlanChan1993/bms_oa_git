@@ -7,26 +7,26 @@ import java.util.Date;
 
 @Data
 public class W_STORE_COMMODITIES {
-    private Integer COMMODITIES_id;//
-    private String  COMMODITIES_no;//编号
-    private String  COMMODITIES_fullName;//全称
-    private String  COMMODITIES_shortName;//简称
-    private String  COMMODITIES_englishName;//英文名称
-    private String  COMMODITIES_companyNo;//公司编码
-    private String  COMMODITIES_brandNo;//品牌编码
-    private String  COMMODITIES_type;//类型
-    private Integer COMMODITIES_status;//状态
+    //private Integer COMMODITIES_id;//
+    private String  no;//编号
+    private String  fullName;//全称
+    private String  shortName;//简称
+    private String  englishName;//英文名称
+    private String  companyNo;//公司编码
+    private String  brandNo;//品牌编码
+    private String  type;//类型
+    private String status;//状态
     private String  originalCommodityNo;//原始货品代码
 
     private String  unitMeasure;//单品单位
-    private String  packageQuantity;//装箱数量
+    private BigDecimal packageQuantity;//装箱数量
     private String packageSpec;//装箱规格
-    private String packageLength;//装箱长度
-    private String packageWidth;//装箱宽度
-    private String packageHeight;//装箱高度
-    private String packageVolume;//装箱体积
-    private String packageWeight;//装箱重量
-    private String unitWeight;//单品重量
+    private BigDecimal packageLength;//装箱长度
+    private BigDecimal packageWidth;//装箱宽度
+    private BigDecimal packageHeight;//装箱高度
+    private BigDecimal packageVolume;//装箱体积
+    private BigDecimal packageWeight;//装箱重量
+    private BigDecimal unitWeight;//单品重量
     private String unitSpec;//单品规格
 
     private String pricingGroup;//物料定价组
