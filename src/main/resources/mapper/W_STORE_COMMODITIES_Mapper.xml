@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--上面2行的是约束依赖，固定照抄就好-->
+<!--下面的才是要自己编写的地方-->
+<!--写mapper的配置文件第一步就是要写<mapper></mapper>标签-->
+<!--<mapper></mapper>标签里包含着各个CURD操作的SQL语句-->
+<mapper namespace="com.infinitus.bms_oa.wms_store.mapper.W_STORE_COMMODITIES_Mapper">
+    <!--定义一个名为BaseResultMap的返回类型-->
+    <resultMap id="BaseResultMap" type="com.infinitus.bms_oa.wms_store.empty.W_STORE_COMMODITIES">
+
+        <result column="COMMODITIES_no" property="no" jdbcType="VARCHAR"></result>
+        <result column="COMMODITIES_fullName" property="fullName" jdbcType="VARCHAR"></result>
+        <result column="COMMODITIES_shortName" property="shortName" jdbcType="VARCHAR"></result>
+        <result column="COMMODITIES_englishName" property="englishName" jdbcType="VARCHAR"></result>
+        <result column="COMMODITIES_companyNo" property="companyNo" jdbcType="VARCHAR"></result>
+        <result column="COMMODITIES_brandNo" property="brandNo" jdbcType="VARCHAR"></result>
+        <result column="COMMODITIES_type" property="type" jdbcType="VARCHAR"></result>
+        <result column="COMMODITIES_status" property="status" jdbcType="VARCHAR"></result>
+        <result column="originalCommodityNo" property="originalCommodityNo" jdbcType="VARCHAR"></result>
+
+        <result column="unitMeasure" property="unitMeasure" jdbcType="VARCHAR"></result>
+        <result column="packageQuantity" property="packageQuantity" jdbcType="DECIMAL"></result>
+        <result column="packageSpec" property="packageSpec" jdbcType="VARCHAR"></result>
+        <result column="packageLength" property="packageLength" jdbcType="DECIMAL"></result>
+        <result column="packageWidth" property="packageWidth" jdbcType="DECIMAL"></result>
+        <result column="packageHeight" property="packageHeight" jdbcType="DECIMAL"></result>
+        <result column="packageVolume" property="packageVolume" jdbcType="DECIMAL"></result>
+        <result column="packageWeight" property="packageWeight" jdbcType="DECIMAL"></result>
+        <result column="unitWeight" property="unitWeight" jdbcType="DECIMAL"></result>
+        <result column="unitSpec" property="unitSpec" jdbcType="VARCHAR"></result>
+
+        <result column="pricingGroup" property="pricingGroup" jdbcType="VARCHAR"></result>
+        <result column="accountSettingGroup" property="accountSettingGroup" jdbcType="VARCHAR"></result>
+        <result column="taxCategory" property="taxCategory" jdbcType="VARCHAR"></result>
+        <result column="taxClassification" property="taxClassification" jdbcType="VARCHAR"></result>
+
+        <result column="materialGroup" property="materialGroup" jdbcType="VARCHAR"></result>
+        <result column="materialType" property="materialType" jdbcType="VARCHAR"></result>
+        <result column="envRelated" property="envRelated" jdbcType="VARCHAR"></result>
+        <result column="dumpPrice" property="dumpPrice" jdbcType="DECIMAL"></result>
+        <result column="benchmarkPrice" property="benchmarkPrice" jdbcType="DECIMAL"></result>
+        <result column="directSelling" property="directSelling" jdbcType="VARCHAR"></result>
+        <result column="employeeOnly" property="employeeOnly" jdbcType="VARCHAR"></result>
+        <result column="barCode" property="barCode" jdbcType="VARCHAR"></result>
+        <result column="originCountry" property="originCountry" jdbcType="VARCHAR"></result>
+        <result column="validityUnit" property="validityUnit" jdbcType="VARCHAR"></result>
+        <result column="validityPeriod" property="validityPeriod" jdbcType="INTEGER"></result>
+        <result column="minimumValidityPeriod" property="minimumValidityPeriod" jdbcType="INTEGER"></result>
+        <result column="extendedWarrantyDuration" property="extendedWarrantyDuration" jdbcType="INTEGER"></result>
+        <result column="fxhAvailable" property="fxhAvailable" jdbcType="VARCHAR"></result>
+        <result column="listingDate" property="listingDate" jdbcType="VARCHAR"></result>
+        <result column="syn_date" property="syn_date" jdbcType="VARCHAR"></result>
+
+    </resultMap>
+    <!--插入语句-->
+    <!--id要与W_STORE_SKUS_Mapper文件中表示插入的函数名一致，parameterType表示函数的输入参数的类型-->
+    <insert id="insertW_STORE_SKUS" parameterType="com.infinitus.bms_oa.wms_store.empty.W_STORE_SKUS">
+      /*insert into W_STORE_SKUS(store_no,store_fullName,store_shortName,store_spuNo,syn_date,commodityNo,status)
+      values(#{no,jdbcType=VARCHAR},#{fullName,jdbcType=VARCHAR},#{shortName,jdbcType=VARCHAR},
+      #{spuNo,jdbcType=VARCHAR},#{syn_date,jdbcType=VARCHAR},#{commodityNo,jdbcType=VARCHAR},
+      #{status,jdbcType=VARCHAR}
+      )*/
+    </insert>
+
+    <!--删除语句-->
+    <delete id="deleteW_STORE_COMMODITIES" parameterType="java.lang.Integer">
+      delete from W_STORE_COMMODITIES
+    </delete>
+
+    <!--查找语句-->
+    <!--resultMap表示函数返回的类型-->
+    <select id="selectW_STORE_SKUS"  resultMap="BaseResultMap">
+       select * from W_STORE_SKUS
+    </select>
+
+    <!--修改语句-->
+    <update id="updateW_STORE_SKUS" parameterType="com.infinitus.bms_oa.wms_store.empty.W_STORE_SKUS">
+    </update>
+
+    <!--批量插入-->
+    <insert id="insertW_STORE_COMMODITIESList" parameterType="java.util.List">
+        INSERT ALL
+        <foreach item="list" index="index" collection="list">
+            INTO W_STORE_COMMODITIES
+            ( COMMODITIES_no ,  COMMODITIES_fullName , COMMODITIES_shortName , COMMODITIES_englishName ,COMMODITIES_companyNo ,
+            COMMODITIES_brandNo , COMMODITIES_type ,  COMMODITIES_status , originalCommodityNo , unitMeasure , packageQuantity,
+            packageSpec , packageLength , packageWidth , packageHeight , packageVolume , packageWeight , unitWeight , unitSpec,
+            pricingGroup , accountSettingGroup , taxCategory , taxClassification , materialGroup , materialType , envRelated , dumpPrice,
+            benchmarkPrice , directSelling , employeeOnly , barCode , originCountry , validityUnit , validityPeriod , minimumValidityPeriod,
+            extendedWarrantyDuration , fxhAvailable , listingDate , syn_date
+             )
+             VALUES
+            (
+            <if test="list.no!=null">
+                #{list.no , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.no==null">
+                '' ,
+            </if>
+
+            <if test="list.fullName!=null">
+                #{list.fullName , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.fullName==null">
+                '' ,
+            </if>
+
+            <if test="list.shortName!=null">
+                #{list.shortName , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.shortName==null">
+                '' ,
+            </if>
+
+            <if test="list.englishName!=null">
+                #{list.englishName , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.englishName==null">
+                '' ,
+            </if>
+
+            <if test="list.companyNo!=null">
+                #{list.companyNo , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.companyNo==null">
+                '' ,
+            </if>
+
+            <if test="list.brandNo!=null">
+                #{list.brandNo , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.brandNo==null">
+                '' ,
+            </if>
+
+            <if test="list.type!=null">
+                #{list.type , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.type==null">
+                '' ,
+            </if>
+
+            <if test="list.status!=null">
+                #{list.status , jdbcType=INTEGER} ,
+            </if>
+            <if test="list.status==null">
+                '' ,
+            </if>
+
+            <if test="list.originalCommodityNo!=null">
+                #{list.originalCommodityNo , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.originalCommodityNo==null">
+                '' ,
+            </if>
+
+            <if test="list.unitMeasure!=null">
+                #{list.unitMeasure , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.unitMeasure==null">
+                '' ,
+            </if>
+
+            <if test="list.packageQuantity!=null">
+                #{list.packageQuantity } ,
+            </if>
+            <if test="list.packageQuantity==null">
+                '' ,
+            </if>
+
+            <if test="list.packageSpec!=null">
+                #{list.packageSpec , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.packageSpec==null">
+                '' ,
+            </if>
+
+            <if test="list.packageLength!=null">
+                #{list.packageLength } ,
+            </if>
+            <if test="list.packageLength==null">
+                '' ,
+            </if>
+
+            <if test="list.packageWidth!=null">
+                #{list.packageWidth } ,
+            </if>
+            <if test="list.packageWidth==null">
+                '' ,
+            </if>
+
+            <if test="list.packageHeight!=null">
+                #{list.packageHeight } ,
+            </if>
+            <if test="list.packageHeight==null">
+                '' ,
+            </if>
+
+            <if test="list.packageVolume!=null">
+                #{list.packageVolume } ,
+            </if>
+            <if test="list.packageVolume==null">
+                '' ,
+            </if>
+
+            <if test="list.packageWeight!=null">
+                #{list.packageWeight } ,
+            </if>
+            <if test="list.packageWeight==null">
+                '' ,
+            </if>
+
+            <if test="list.unitWeight!=null">
+                #{list.unitWeight } ,
+            </if>
+            <if test="list.unitWeight==null">
+                '' ,
+            </if>
+
+            <if test="list.unitSpec!=null">
+                #{list.unitSpec , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.unitSpec==null">
+                '' ,
+            </if>
+
+            <if test="list.pricingGroup!=null">
+                #{list.pricingGroup , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.pricingGroup==null">
+                '' ,
+            </if>
+
+            <if test="list.accountSettingGroup!=null">
+                #{list.accountSettingGroup , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.accountSettingGroup==null">
+                '' ,
+            </if>
+
+            <if test="list.taxCategory!=null">
+                #{list.taxCategory , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.taxCategory==null">
+                '' ,
+            </if>
+
+            <if test="list.taxClassification!=null">
+                #{list.taxClassification , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.taxClassification==null">
+                '' ,
+            </if>
+
+            <if test="list.materialGroup!=null">
+                #{list.materialGroup , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.materialGroup==null">
+                '' ,
+            </if>
+
+            <if test="list.materialType!=null">
+                #{list.materialType , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.materialType==null">
+                '' ,
+            </if>
+
+            <if test="list.envRelated!=null">
+                #{list.envRelated , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.envRelated==null">
+                '' ,
+            </if>
+
+            <if test="list.dumpPrice!=null">
+                #{list.dumpPrice } ,
+            </if>
+            <if test="list.dumpPrice==null">
+                '' ,
+            </if>
+
+            <if test="list.benchmarkPrice!=null">
+                #{list.benchmarkPrice} ,
+            </if>
+            <if test="list.benchmarkPrice==null">
+                '' ,
+            </if>
+
+            <if test="list.directSelling!=null">
+                #{list.directSelling , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.directSelling==null">
+                '' ,
+            </if>
+
+            <if test="list.employeeOnly!=null">
+                #{list.employeeOnly , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.employeeOnly==null">
+                '' ,
+            </if>
+
+            <if test="list.barCode!=null">
+                #{list.barCode , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.barCode==null">
+                '' ,
+            </if>
+
+            <if test="list.originCountry!=null">
+                #{list.originCountry , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.originCountry==null">
+                '' ,
+            </if>
+
+            <if test="list.validityUnit!=null">
+                #{list.validityUnit , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.validityUnit==null">
+                '' ,
+            </if>
+
+            <if test="list.validityPeriod!=null">
+                #{list.validityPeriod } ,
+            </if>
+            <if test="list.validityPeriod==null">
+                '' ,
+            </if>
+
+            <if test="list.minimumValidityPeriod!=null">
+                #{list.minimumValidityPeriod } ,
+            </if>
+            <if test="list.minimumValidityPeriod==null">
+                '' ,
+            </if>
+
+            <if test="list.extendedWarrantyDuration!=null">
+                #{list.extendedWarrantyDuration } ,
+            </if>
+            <if test="list.extendedWarrantyDuration==null">
+                '' ,
+            </if>
+
+            <if test="list.fxhAvailable!=null">
+                #{list.fxhAvailable , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.fxhAvailable==null">
+                '' ,
+            </if>
+
+            <if test="list.listingDate!=null">
+                #{list.listingDate , jdbcType=VARCHAR} ,
+            </if>
+            <if test="list.listingDate==null">
+                '' ,
+            </if>
+
+            TO_CHAR(sysdate , 'yyyy-MM-dd HH24:mm:ss')
+            )
+        </foreach>
+        SELECT 1 FROM DUAL
+    </insert>
+</mapper>
