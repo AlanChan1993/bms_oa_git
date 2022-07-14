@@ -69,17 +69,17 @@ public class WmsStoreTasks {
     public void  getSkus() throws UnsupportedEncodingException {
         //1、商品中心给出的demo中的加密与打印请求头
         String method = "GET";
-        String uri = "/product-api/skus";
+        //String uri = "/product-api/skus";
         String date = RFC_7231_FORMATTER.format(ZonedDateTime.now(UTC));// 时间
         // 时间 + 请求类型 + 请求uri 的加密
-        String signature =encodeBase64String(new HmacUtils(HmacAlgorithms.HMAC_SHA_256, secret).hmac("date: " + date + "\n" + method + " " + uri + " HTTP/1.1"));
+        String signature =encodeBase64String(new HmacUtils(HmacAlgorithms.HMAC_SHA_256, secret).hmac("date: " + date + "\n" + method + " " + listskus + " HTTP/1.1"));
         // HMAC 授权
         String authorization = "hmac username=\"" + keyId + "\", algorithm=\"hmac-sha256\", headers=\"date request-line\", signature=\"" + signature + "\"";
         // 打印请求头
-        //log.info("Authorization: {}" , authorization);
-        //log.info("Date: {}", date);
+        log.info("Authorization: {}" , authorization);
+        log.info("Date: {}", date);
         //2、拼接第一次请求的url并请求接口
-        String urlAll = url + listskus+"nos=&page=0&size=200";
+        String urlAll = url + listskus+"?nos=&page=0&size=200";
         String result = HttpUtil.httpGet(urlAll, authorization, date);
         JSONObject jsonResult = JSONObject.parseObject(result);
         //log.info("jsonResult=:{}", jsonResult);
@@ -99,7 +99,7 @@ public class WmsStoreTasks {
             return ;
         }
         for (int i = 1; i < pagePojo.getTotalPages(); i++) {
-            urlAll = url + listskus + "nos=&page=" + i + "&size=200";
+            urlAll = url + listskus + "?nos=&page=" + i + "&size=200";
             String result2 = HttpUtil.httpGet(urlAll, authorization, date);
             JSONObject jsonResult2 = JSONObject.parseObject(result2);
             //log.info("i=:{}", i);//用于检查循环数
@@ -118,17 +118,17 @@ public class WmsStoreTasks {
     public void getCommodities() throws UnsupportedEncodingException {
 //1、商品中心给出的demo中的加密与打印请求头
         String method = "GET";
-        String uri = "/product-api/commodities";
+        //String uri = "/product-api/commodities";
         String date = RFC_7231_FORMATTER.format(ZonedDateTime.now(UTC));// 时间
         // 时间 + 请求类型 + 请求uri 的加密
-        String signature =encodeBase64String(new HmacUtils(HmacAlgorithms.HMAC_SHA_256, secret).hmac("date: " + date + "\n" + method + " " + uri + " HTTP/1.1"));
+        String signature =encodeBase64String(new HmacUtils(HmacAlgorithms.HMAC_SHA_256, secret).hmac("date: " + date + "\n" + method + " " + listCommodities + " HTTP/1.1"));
         // HMAC 授权
         String authorization = "hmac username=\"" + keyId + "\", algorithm=\"hmac-sha256\", headers=\"date request-line\", signature=\"" + signature + "\"";
         // 打印请求头
-        //log.info("Authorization: {}" , authorization);
-        //log.info("Date: {}", date);
+        log.info("Authorization: {}" , authorization);
+        log.info("Date: {}", date);
         //2、拼接第一次请求的url并请求接口
-        String urlAll = url + listCommodities+"nos=&page=0&size=200";
+        String urlAll = url + listCommodities+"?nos=&page=0&size=200";
         String result = HttpUtil.httpGet(urlAll, authorization, date);
         JSONObject jsonResult = JSONObject.parseObject(result);
         log.info("jsonResult=:{}", jsonResult);
@@ -148,7 +148,7 @@ public class WmsStoreTasks {
             return ;
         }
         for (int i = 1; i < pagePojo.getTotalPages(); i++) {
-            urlAll = url + listCommodities + "nos=&page=" + i + "&size=200";
+            urlAll = url + listCommodities + "?nos=&page=" + i + "&size=200";
             String result2 = HttpUtil.httpGet(urlAll, authorization, date);
             JSONObject jsonResult2 = JSONObject.parseObject(result2);
             //log.info("i=:{}", i);//用于检查循环数

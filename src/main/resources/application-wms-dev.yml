@@ -50,9 +50,9 @@ wms:
   url:
     value: https://gapi-dev.infinitus.com.cn
   listskus:
-    value: /product-api/skus?
+    value: /product-api/skus
   ListCommodities:
-    value: /product-api/commodities?
+    value: /product-api/commodities
 
 
 
