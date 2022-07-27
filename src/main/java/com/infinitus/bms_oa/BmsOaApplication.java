@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @MapperScan("com.infinitus.bms_oa.mapper")
 @MapperScan("com.infinitus.bms_oa.bms_op.mapper")
 @MapperScan("com.infinitus.bms_oa.wms_store.mapper")//指向mapper.java
+@MapperScan("com.infinitus.bms_oa.bms_free.mapper")
 @EnableScheduling
 //@EnableTransactionManagement//用于事务回滚
 public class BmsOaApplication {

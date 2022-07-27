@@ -27,7 +27,7 @@ import static java.time.ZoneOffset.UTC;
 import static org.apache.commons.codec.binary.Base64.encodeBase64String;
 
 @Slf4j
-@Component
+//@Component
 public class WmsStoreTasks {
 
     @Value("${wms.secret.value}")

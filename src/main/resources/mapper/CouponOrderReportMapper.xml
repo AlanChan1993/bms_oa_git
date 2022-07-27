@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--上面2行的是约束依赖，固定照抄就好-->
+<!--下面的才是要自己编写的地方-->
+<!--写mapper的配置文件第一步就是要写<mapper></mapper>标签-->
+<!--<mapper></mapper>标签里包含着各个CURD操作的SQL语句-->
+<mapper namespace="com.infinitus.bms_oa.bms_free.mapper.CouponOrderReportMapper">
+    <!--定义一个名为BaseResultMap的返回类型-->
+    <resultMap id="BaseResultMap" type="com.infinitus.bms_oa.bms_free.empty.CouponOrderReport">
+
+        <result column="receiveName" property="receiveName" jdbcType="VARCHAR"></result>
+        <result column="couponNumber" property="couponNumber" jdbcType="VARCHAR"></result>
+        <result column="senderAddress" property="senderAddress" jdbcType="VARCHAR"></result>
+        <result column="useTime" property="useTime" jdbcType="VARCHAR"></result>
+        <result column="senderName" property="senderName" jdbcType="VARCHAR"></result>
+        <result column="enableTime" property="enableTime" jdbcType="VARCHAR"></result>
+        <result column="weight" property="weight" jdbcType="INTEGER"></result>
+        <result column="expressName" property="expressName" jdbcType="VARCHAR"></result>
+        <result column="deductAmount" property="deductAmount" jdbcType="INTEGER"></result>
+        <result column="disableTime" property="disableTime" jdbcType="VARCHAR"></result>
+        <result column="receiveAddress" property="receiveAddress" jdbcType="VARCHAR"></result>
+        <result column="expressNumber" property="expressNumber" jdbcType="VARCHAR"></result>
+        <result column="shopId" property="shopId" jdbcType="VARCHAR"></result>
+        <result column="purchaseNumber" property="purchaseNumber" jdbcType="VARCHAR"></result>
+        <result column="price" property="price" jdbcType="INTEGER"></result>
+    </resultMap>
+    <!--插入语句-->
+    <!--id要与W_STORE_SKUS_Mapper文件中表示插入的函数名一致，parameterType表示函数的输入参数的类型-->
+    <insert id="createCouponOrderReport" parameterType="com.infinitus.bms_oa.bms_free.empty.CouponOrderReport">
+      insert into Coupon_Order_Report(receiveName,couponNumber,senderAddress,useTime,senderName,enableTime,weight,
+      expressName,deductAmount,disableTime,receiveAddress,expressNumber,shopId,purchaseNumber,price)
+      values(#{receiveName,jdbcType=VARCHAR},#{couponNumber,jdbcType=VARCHAR},#{senderAddress,jdbcType=VARCHAR},
+      #{useTime,jdbcType=VARCHAR},#{senderName,jdbcType=VARCHAR},#{enableTime,jdbcType=VARCHAR},
+      #{weight,jdbcType=INTEGER},#{expressName,jdbcType=VARCHAR},#{deductAmount,jdbcType=INTEGER},
+      #{disableTime,jdbcType=VARCHAR},#{receiveAddress,jdbcType=VARCHAR},#{expressNumber,jdbcType=VARCHAR}
+      ,#{shopId,jdbcType=VARCHAR},#{purchaseNumber,jdbcType=VARCHAR},#{price,jdbcType=INTEGER}
+      )
+    </insert>
+
+</mapper>
