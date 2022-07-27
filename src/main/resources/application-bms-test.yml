@@ -41,7 +41,10 @@ BMS:
     #op准生产地址：
     bmsToOP: https://erp-trial.infinitus.com.cn/esop-op/admin/esb/op/accounting/ExpenseAccount
 
-
+#测试地址
+CouponOrderReport:
+  url:
+    value: http://cswxm.e-share.ink//Coupon/getCouponOrderReportByTime
 target:
   token:
     #BMS->OP秘钥

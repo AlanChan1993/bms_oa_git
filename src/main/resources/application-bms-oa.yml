@@ -39,6 +39,10 @@ BMS:
 
     #op生产地址：
     bmsToOP: https://erp.infinitus.com.cn/esop-op/admin/esb/op/accounting/ExpenseAccount
+#生产地址
+CouponOrderReport:
+  url:
+    value: https://www.dazhenservice.com/Coupon/getCouponOrderReportByTime
 
 target:
   token:

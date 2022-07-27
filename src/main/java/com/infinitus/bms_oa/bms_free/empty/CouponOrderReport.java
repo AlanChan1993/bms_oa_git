@@ -1,11 +1,12 @@
 package com.infinitus.bms_oa.bms_free.empty;
 
+import com.alibaba.fastjson.JSON;
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Data
-public class CouponOrderReport {
+public class CouponOrderReport extends JSON {
          private String receiveName;//收货人姓名
          private String  couponNumber;//优惠券编号
          private String  senderAddress;//寄件人地址
