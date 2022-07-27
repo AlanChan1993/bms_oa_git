@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -36,11 +38,18 @@ public class CouponOrderReportTask {
 
     private void getCouponOrderReport(){
         String nowDate = simpleDateFormat.format(new Date());
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -1); //得到前一天
+        Date date = calendar.getTime();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
         PlatformType platformType = new PlatformType();
-        //platformType.setUseTimeStart(nowDate+" 00:00:00");
-        platformType.setUseTimeStart("2022-07-22 00:00:00");
-        platformType.setUseTimeEnd(nowDate+" 23:59:59");
+        platformType.setUseTimeStart(df.format(date)+" 00:00:00");
+        //platformType.setUseTimeStart("2022-07-22 00:00:00");
+        platformType.setUseTimeEnd(df.format(date)+" 23:59:59");
         log.info("platformType=:{}" + platformType);
+
         JSONObject jsonObject = (JSONObject) JSONObject.toJSON(platformType);
         String postData = JSONObject.toJSONString(jsonObject);
         JSONObject resultJson = HttpUtil.doPostJson(url, postData, "", "");
