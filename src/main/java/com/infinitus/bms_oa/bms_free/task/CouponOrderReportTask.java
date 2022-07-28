@@ -63,7 +63,6 @@ public class CouponOrderReportTask {
                     log.info("couponOrderReportList.get(i)=:{}", couponOrderReportList.get(i));
                     CouponOrderReport couponOrderReport = (CouponOrderReport) JSON.toJavaObject(couponOrderReportList.get(i), CouponOrderReport.class);
                     service.createCouponOrderReport(couponOrderReport);
-
                 }
             }
         }else{
