@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 @Slf4j
-@Component
+//@Component
 public class CouponOrderReportTask {
     @Value("${CouponOrderReport.url.value}")
     private String url;
@@ -37,7 +37,7 @@ public class CouponOrderReportTask {
     }
 
     private void getCouponOrderReport(){
-        String nowDate = simpleDateFormat.format(new Date());
+        //String nowDate = simpleDateFormat.format(new Date());
 
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -1); //得到前一天

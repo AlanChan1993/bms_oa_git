@@ -1,3 +1,4 @@
+#生产上端口号区分开
 spring:
   profiles:
-    active: bms-test
+    active: wms-dev

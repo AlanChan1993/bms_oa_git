@@ -27,7 +27,7 @@ import static java.time.ZoneOffset.UTC;
 import static org.apache.commons.codec.binary.Base64.encodeBase64String;
 
 @Slf4j
-//@Component
+@Component
 public class WmsStoreTasks {
 
     @Value("${wms.secret.value}")
@@ -56,8 +56,9 @@ public class WmsStoreTasks {
 
     /**
      * 定时任务 生产一小时执行一次
+     * 波哥后面说明是每天全量同步一次
      */
-    @Scheduled(fixedRate = 1000 * 60 * 60)
+    @Scheduled(fixedRate = 24000 * 60 * 60)
     public void getStoreDetailTask() throws UnsupportedEncodingException {
         getSkus();
         getCommodities();
